@@ -76,7 +76,7 @@ devel-flashable-android13-5.10:
    - if: $CI_PIPELINE_SOURCE == "push"
 
 
-devel-flashable-android13-5.10:
+devel-flashable-android13-5.15:
   extends: [devel-flashable]
   needs: [build-android13-5.15]
   before_script:
