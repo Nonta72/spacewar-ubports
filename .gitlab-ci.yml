@@ -35,6 +35,22 @@ build-android12-5.10:
   rules:
    - if: $CI_PIPELINE_SOURCE == "push"
 
+build-android13-5.10:
+  tags: [ubports]
+  extends: build
+  before_script:
+    - ln -sf deviceinfo-android13-5.10 deviceinfo
+  rules:
+   - if: $CI_PIPELINE_SOURCE == "push"
+
+build-android13-5.15:
+  tags: [ubports]
+  extends: build
+  before_script:
+    - ln -sf deviceinfo-android13-5.15 deviceinfo
+  rules:
+   - if: $CI_PIPELINE_SOURCE == "push"
+
 devel-flashable-android12-5.4:
   extends: [devel-flashable]
   needs: [build-android12-5.4]
@@ -48,5 +64,22 @@ devel-flashable-android12-5.10:
   needs: [build-android12-5.10]
   before_script:
     - ln -sf deviceinfo-android12-5.10 deviceinfo
+  rules:
+   - if: $CI_PIPELINE_SOURCE == "push"
+
+devel-flashable-android13-5.10:
+  extends: [devel-flashable]
+  needs: [build-android13-5.10]
+  before_script:
+    - ln -sf deviceinfo-android13-5.10 deviceinfo
+  rules:
+   - if: $CI_PIPELINE_SOURCE == "push"
+
+
+devel-flashable-android13-5.10:
+  extends: [devel-flashable]
+  needs: [build-android13-5.15]
+  before_script:
+    - ln -sf deviceinfo-android13-5.15 deviceinfo
   rules:
    - if: $CI_PIPELINE_SOURCE == "push"
