@@ -51,6 +51,14 @@ build-android13-5.15:
   rules:
    - if: $CI_PIPELINE_SOURCE == "push"
 
+build-android14-6.1:
+  tags: [ubports]
+  extends: build
+  before_script:
+    - ln -sf deviceinfo-android14-6.1 deviceinfo
+  rules:
+   - if: $CI_PIPELINE_SOURCE == "push"
+
 devel-flashable-android12-5.4:
   extends: [devel-flashable]
   needs: [build-android12-5.4]
@@ -83,3 +91,13 @@ devel-flashable-android13-5.15:
     - ln -sf deviceinfo-android13-5.15 deviceinfo
   rules:
    - if: $CI_PIPELINE_SOURCE == "push"
+
+devel-flashable-android14-6.1:
+  extends: [devel-flashable]
+  needs: [build-android14-6.1]
+  before_script:
+    - ln -sf deviceinfo-android14-6.1 deviceinfo
+  rules:
+   - if: $CI_PIPELINE_SOURCE == "push"
+     when: never
+   - when: manual
