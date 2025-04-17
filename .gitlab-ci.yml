@@ -99,5 +99,3 @@ devel-flashable-android14-6.1:
     - ln -sf deviceinfo-android14-6.1 deviceinfo
   rules:
    - if: $CI_PIPELINE_SOURCE == "push"
-     when: never
-   - when: manual
