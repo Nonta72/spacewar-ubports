@@ -36,8 +36,18 @@ usb_setup_configfs() {
     write $GADGET_DIR/g1/strings/0x409/product      "Failed to boot"
 
     if echo $USB_FUNCTIONS | grep -q "rndis"; then
-        mkdir $GADGET_DIR/g1/functions/rndis.usb0
-        mkdir $GADGET_DIR/g1/functions/rndis_bam.rndis
+        NETWORK_FUNCTION=""
+        for function in ncm.usb0 rndis.usb0 rndis_bam.rndis; do
+            if mkdir $GADGET_DIR/g1/functions/$function; then
+                NETWORK_FUNCTION=$function
+                break
+            fi
+        done
+
+        if [ -z "$NETWORK_FUNCTION" ]; then
+            echo "Error: No USB network gadget function available" >&2
+            exit 1
+        fi
     fi
     echo $USB_FUNCTIONS | grep -q "mass_storage" && mkdir $GADGET_DIR/g1/functions/storage.0
 
@@ -46,8 +56,7 @@ usb_setup_configfs() {
     write $GADGET_DIR/g1/configs/c.1/strings/0x409/configuration "$USB_FUNCTIONS"
 
     if echo $USB_FUNCTIONS | grep -q "rndis"; then
-        ln -s $GADGET_DIR/g1/functions/rndis.usb0 $GADGET_DIR/g1/configs/c.1
-        ln -s $GADGET_DIR/g1/functions/rndis_bam.rndis $GADGET_DIR/g1/configs/c.1
+        ln -s $GADGET_DIR/g1/functions/$NETWORK_FUNCTION $GADGET_DIR/g1/configs/c.1
     fi
     echo $USB_FUNCTIONS | grep -q "mass_storage" && ln -s $GADGET_DIR/g1/functions/storage.0 $GADGET_DIR/g1/configs/c.1
 
