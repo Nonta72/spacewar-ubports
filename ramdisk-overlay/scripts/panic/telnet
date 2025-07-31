@@ -80,15 +80,76 @@ usb_setup_android_usb() {
     write $ANDROID_USB/enable          1
 }
 
+load_adsp() {
+    # It seems recent Qualcomm SoC devices with PMIC Glink require aDSP
+    # firmware loaded for PMIC and Type-C port to work.
+
+    # It becomes tricky if adsp_loader is compiled as module and not
+    # part of vendor_boot ramdisk. As we can not rely on rootfs
+    # in case halium-boot ramdisk panics, attempt to load the module
+    # from the vendor_dlkm partition.
+
+    # Please note this will only work if the booted kernel module ABI
+    # is compatible with the stock vendor kernel ABI, which can be
+    # tested by booting Android with the compiled kernel.
+
+    # Mount firmware
+    mkdir -p /firmware
+
+    if [ -e /dev/disk/by-partlabel/modem_a ]; then
+        tell_kmsg "Mounting /dev/disk/by-partlabel/modem_a to /firmware"
+        mount -o ro /dev/disk/by-partlabel/modem_a /firmware
+        write /sys/module/firmware_class/parameters/path "/firmware/image"
+    else
+        tell_kmsg "No modem_a partition found, skipping loading adsp_loader_dlkm"
+        return 0
+    fi
+
+    if [ ! -e /sys/kernel/boot_adsp/boot ]; then
+        # Mount vendor_dlkm or vendor partition to /vendor
+        mkdir -p /vendor
+
+        if [ -e /dev/mapper/vendor_dlkm_a ]; then
+            tell_kmsg "Mounting /dev/mapper/vendor_dlkm_a to /vendor"
+            mount -o ro /dev/mapper/vendor_dlkm_a /vendor
+        elif [ -e /dev/mapper/vendor_a ]; then
+            tell_kmsg "Mounting /dev/mapper/vendor_a to /vendor"
+            mount -o ro /dev/mapper/vendor_a /vendor
+        else
+            tell_kmsg "No vendor_dlkm or vendor partition found, skipping loading adsp_loader_dlkm"
+            return 0
+        fi
+
+        # Load adsp_loader_dlkm module from vendor_dlkm partition
+        rm -f "/lib/modules/$(uname -r)"
+        ln -sf /vendor/lib/modules "/lib/modules/$(uname -r)"
+        # Fix loading dependencies due to /vendor/lib/modules paths in modules.dep
+        ln -sf /vendor "/lib/modules/$(uname -r)/vendor"
+
+        tell_kmsg "Loading adsp_loader_dlkm module"
+        modprobe adsp_loader_dlkm
+        sleep 1
+    fi
+
+    # Load ADSP firmware for PMIC
+    write /sys/kernel/boot_adsp/boot 1
+    sleep 3
+}
+
 # This determines which USB setup method is going to be used
 usb_setup() {
     mkdir /config || true
     mount -t configfs none /config || true
 
+    if grep -q "androidboot.hardware = \"qcom\"" /proc/bootconfig 2>/dev/null; then
+        # Attempt to boot aDSP if running on a Qualcomm SoC
+        load_adsp
+    fi
+
     if [ -d $ANDROID_USB ]; then
-        usb_setup_android_usb $1
+        usb_setup_android_usb "$1"
     elif [ -d $GADGET_DIR ]; then
-        usb_setup_configfs $1
+        usb_setup_configfs "$1"
     fi
 }
 
