@@ -1,0 +1,9 @@
+[mode]
+name = mtp
+module = none
+appsync = 1 # Launches uMTP-Responder as needed
+
+[options]
+# sysfs_value = comma separated list of functions to enable in this mode
+sysfs_value = mtp
+idProduct = $IDPRODUCT_MTP

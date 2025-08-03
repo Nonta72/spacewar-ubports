@@ -1,0 +1,205 @@
+#!/bin/sh
+
+PREREQ=""
+prereqs() {
+	echo "$PREREQ"
+}
+case $1 in
+# get pre-requisites
+prereqs)
+	prereqs
+	exit 0
+	;;
+esac
+
+USB_FUNCTIONS=rndis
+ANDROID_USB=/sys/class/android_usb/android0
+GADGET_DIR=/config/usb_gadget
+LOCAL_IP=192.168.2.15
+EXPLICIT_BUSYBOX="/bin/busybox"
+TELNET_DEBUG_PORT=23
+
+write() {
+	echo -n "$2" >"$1"
+}
+
+tell_kmsg() {
+	# Echos a string into /dev/kmsg, ignoring errors.
+	echo "initrd: $1" >/dev/kmsg || true
+}
+
+load_adsp() {
+    # If you're unlucky to be reading this, here is a bit of explanation.
+    # It seems some(?) Qualcomm SoC devices with PMIC Glink require aDSP
+    # firmware loaded for PMIC and Type-C port to work.
+
+    # It becomes tricky if adsp_loader is compiled as module and not
+    # part of vendor_boot ramdisk. As we can not rely on rootfs
+    # in case halium-boot ramdisk panics, attempt to load the module
+    # from the vendor partition.
+
+    # Please note this will only work if the booted kernel module ABI
+    # is compatible with the stock vendor kernel ABI, which can be
+    # tested by booting Android with the compiled kernel.
+
+    # Mount firmware
+    tell_kmsg "Mounting /dev/disk/by-partlabel/modem_a to /firmware"
+    mkdir /firmware
+    mount -o ro /dev/disk/by-partlabel/modem_a /firmware
+    write /sys/module/firmware_class/parameters/path "/firmware/image"
+
+    if [ ! -e /sys/kernel/boot_adsp/boot ]; then
+        # Mount vendor partition
+        tell_kmsg "Mounting /dev/mapper/vendor_a to /vendor"
+        mkdir /vendor
+        mount -o ro /dev/mapper/vendor_a /vendor
+
+        # Load adsp_loader_dlkm module from vendor partition
+        rm -f "/lib/modules/$(uname -r)"
+        ln -sf /vendor/lib/modules "/lib/modules/$(uname -r)"
+        # Fix loading dependencies due to /vendor/lib/modules paths in modules.dep
+        ln -sf /vendor "/lib/modules/$(uname -r)/vendor"
+
+        tell_kmsg "Loading adsp_loader_dlkm module"
+        modprobe adsp_loader_dlkm
+        sleep 1
+    fi
+
+    # Load ADSP firmware for PMIC
+    write /sys/kernel/boot_adsp/boot 1
+}
+
+# This sets up the USB with whatever USB_FUNCTIONS are set to via configfs
+usb_setup_configfs() {
+    G_USB_ISERIAL=$GADGET_DIR/g1/strings/0x409/serialnumber
+
+    mkdir $GADGET_DIR/g1
+    write $GADGET_DIR/g1/idVendor                   "0x18D1"
+    write $GADGET_DIR/g1/idProduct                  "0xD001"
+    mkdir $GADGET_DIR/g1/strings/0x409
+    write $GADGET_DIR/g1/strings/0x409/serialnumber "$1"
+    write $GADGET_DIR/g1/strings/0x409/manufacturer "Halium initrd"
+    write $GADGET_DIR/g1/strings/0x409/product      "Failed to boot"
+
+    if echo $USB_FUNCTIONS | grep -q "rndis"; then
+        mkdir $GADGET_DIR/g1/functions/ncm.usb0
+        mkdir $GADGET_DIR/g1/functions/rndis_bam.rndis
+    fi
+    echo $USB_FUNCTIONS | grep -q "mass_storage" && mkdir $GADGET_DIR/g1/functions/storage.0
+
+    mkdir $GADGET_DIR/g1/configs/c.1
+    mkdir $GADGET_DIR/g1/configs/c.1/strings/0x409
+    write $GADGET_DIR/g1/configs/c.1/strings/0x409/configuration "$USB_FUNCTIONS"
+
+    if echo $USB_FUNCTIONS | grep -q "rndis"; then
+        ln -s $GADGET_DIR/g1/functions/ncm.usb0 $GADGET_DIR/g1/configs/c.1
+        ln -s $GADGET_DIR/g1/functions/rndis_bam.rndis $GADGET_DIR/g1/configs/c.1
+    fi
+    echo $USB_FUNCTIONS | grep -q "mass_storage" && ln -s $GADGET_DIR/g1/functions/storage.0 $GADGET_DIR/g1/configs/c.1
+
+    echo "$(ls /sys/class/udc | grep -v dummy | head -1)" > $GADGET_DIR/g1/UDC
+}
+
+# This sets up the USB with whatever USB_FUNCTIONS are set to via android_usb
+usb_setup_android_usb() {
+    G_USB_ISERIAL=$ANDROID_USB/iSerial
+    write $ANDROID_USB/enable          0
+    write $ANDROID_USB/functions       ""
+    write $ANDROID_USB/enable          1
+    usleep 500000 # 0.5 delay to attempt to remove rndis function
+    write $ANDROID_USB/enable          0
+    write $ANDROID_USB/idVendor        18D1
+    write $ANDROID_USB/idProduct       D001
+    write $ANDROID_USB/iManufacturer   "Halium initrd"
+    write $ANDROID_USB/iProduct        "Failed to boot"
+    write $ANDROID_USB/iSerial         "$1"
+    write $ANDROID_USB/functions       $USB_FUNCTIONS
+    write $ANDROID_USB/enable          1
+}
+
+# This determines which USB setup method is going to be used
+usb_setup() {
+    mkdir /config || true
+    mount -t configfs none /config || true
+
+    if [ -d $GADGET_DIR ]; then
+        usb_setup_configfs $1
+    fi
+}
+
+usb_info() {
+    # make sure USB is settled
+    echo "########################## usb_info: $1"
+    sleep 1
+    write $G_USB_ISERIAL "$1"
+}
+
+inject_loop() {
+	INJ_DIR=/init-ctl
+	INJ_STDIN=$INJ_DIR/stdin
+
+	mkdir $INJ_DIR
+	mkfifo $INJ_STDIN
+	echo "This entire directory is for debugging init - it can safely be removed" >$INJ_DIR/README
+
+	echo "########################## Beginning inject loop"
+	while :; do
+		while read IN; do
+			if [ "$IN" = "continue" ]; then break 2; fi
+			$IN
+		done <$INJ_STDIN
+	done
+	rm -rf $INJ_DIR # Clean up if we exited nicely
+	echo "########################## inject loop done"
+}
+
+# This device requires aDSP firmware loaded for Type-C port to work
+load_adsp
+
+usb_setup "halium-initrd telnet 192.168.2.15"
+
+USB_IFACE=notfound
+/sbin/ifconfig rndis0 $LOCAL_IP && USB_IFACE=rndis0
+if [ x$USB_IFACE = xnotfound ]; then
+	/sbin/ifconfig usb0 $LOCAL_IP && USB_IFACE=usb0
+fi
+# Report for the logs
+/sbin/ifconfig -a
+
+# Unable to set up USB interface? Reboot.
+if [ x$USB_IFACE = xnotfound ]; then
+	usb_info "Halium initrd Debug: ERROR: could not setup USB as usb0 or rndis0"
+	dmesg
+	sleep 60 # plenty long enough to check usb on host
+	reboot -f
+fi
+
+# Create /etc/udhcpd.conf file.
+echo "start 192.168.2.20" >/etc/udhcpd.conf
+echo "end 192.168.2.90" >>/etc/udhcpd.conf
+echo "lease_file /var/udhcpd.leases" >>/etc/udhcpd.conf
+echo "interface $USB_IFACE" >>/etc/udhcpd.conf
+echo "option subnet 255.255.255.0" >>/etc/udhcpd.conf
+
+# Be explicit about busybox so this works in a rootfs too
+echo "########################## starting dhcpd"
+$EXPLICIT_BUSYBOX udhcpd
+
+# Non-blocking telnetd
+echo "########################## starting telnetd"
+# We run telnetd on different ports pre/post-switch_root This
+# avoids problems with an unterminated pre-switch_root telnetd
+# hogging the port
+$EXPLICIT_BUSYBOX telnetd -b ${LOCAL_IP}:${TELNET_DEBUG_PORT} -l /bin/sh
+
+# For some reason this does not work in rootfs
+usb_info "Halium initrd Debug telnet on port $TELNET_DEBUG_PORT on $USB_IFACE $LOCAL_IP - also running udhcpd"
+
+ps -wlT
+ps -ef
+netstat -lnp
+cat /proc/mounts
+sync
+
+# Run command injection loop = can be exited via 'continue'
+inject_loop

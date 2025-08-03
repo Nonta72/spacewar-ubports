@@ -1,0 +1,20 @@
+[Unit]
+Description=Manages uMTP-Responder storages at runtime
+
+After=lomiri-full-greeter.service
+After=lomiri-full-shell.service
+After=lomiri-greeter.service
+After=lomiri-shell.service
+
+After=umtprd.service
+
+Before=ubuntu-touch-session.target
+PartOf=ubuntu-touch-session.target
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/libexec/umtprd-manager
+
+[Install]
+WantedBy=ubuntu-touch-session.target

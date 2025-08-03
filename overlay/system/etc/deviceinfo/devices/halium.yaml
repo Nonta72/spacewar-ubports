@@ -1,0 +1,29 @@
+SPACEWAR:
+  Names:
+    - spacewar
+    - SPACEWAR
+    - Spacewar
+    - Nothing Phone 1
+    - Nothing Phone (1)
+
+  PrettyName: Nothing Phone 1
+  DeviceType: phone
+  GridUnit: 24
+  SupportedOrientations:
+    - Portrait
+    - Landscape
+    - InvertedLandscape
+  MirAndroidPlatformServerBackpressure:
+    - false
+  MirAndroidPlatformServerPartialUpdates:
+    - true
+  MirAndroidPlatformServerEglSync:
+    - false
+  MirAndroidPlatformClientEglFlush:
+    - "!/usr/bin/unity8,!/usr/bin/lomiri,all"
+
+  FlashlightSysfsPath: "/sys/class/leds/led:torch_0/brightness"
+  FlashlightSwitchPath: "/sys/class/leds/led:switch_0/brightness"
+  OfonoPlugin: binder
+  OfonoImplementsIms: true
+  FilesystemEncryption: true

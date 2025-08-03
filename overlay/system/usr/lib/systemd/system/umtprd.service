@@ -1,0 +1,11 @@
+[Unit]
+Description=uMTP-Responder
+
+[Service]
+Type=notify
+ExecStartPre=/usr/libexec/usb-moded/umtprd-functionfs.sh
+ExecStart=/usr/bin/umtprd
+ExecStopPost=/bin/umount mtp
+Restart=on-failure
+
+# No WantedBy; should be triggered by usb-moded.
