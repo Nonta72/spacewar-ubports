@@ -430,19 +430,24 @@ mount_kernel_modules() {
 
 load_kernel_modules() {
 	mkdir -p /lib/modules
-	cd /lib/modules
 	ln -sf /lib/modules "/lib/modules/$(uname -r)"
 
 	tell_kmsg "Loading kernel modules from $(pwd)"
 
-	cat modules.load | while read line; do
+	# Has to exist for busybox modprobe to work
+	touch "/lib/modules/$(uname -r)"/modules.builtin
+
+	# Convert modules.blocklist to modprobe.d blacklist
+	mkdir -p /etc/modprobe.d
+	cat "/lib/modules/$(uname -r)"/modules.blocklist | sed -e 's/blocklist/blacklist/g' >> /etc/modprobe.d/blacklist.conf
+
+	cat "/lib/modules/$(uname -r)/modules.load" | while read line; do
 		set -- $line
 		# Skip commented entries
 		[ "$1" = "#" ] && continue
-		modprobe -a "$1"
+		tell_kmsg "Loading $1"
+		modprobe -v -a "$1" > /dev/kmsg 2>&1
 	done
-
-	cd -
 }
 
 mountroot() {

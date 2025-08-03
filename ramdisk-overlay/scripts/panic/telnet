@@ -80,6 +80,20 @@ usb_setup_android_usb() {
     write $ANDROID_USB/enable          1
 }
 
+load_recovery_kernel_modules() {
+    [ ! -e /lib/modules/$(uname -r)/modules.load.recovery ] && return 0
+
+    tell_kmsg "Loading kernel modules for recovery from $(pwd)"
+
+    cat "/lib/modules/$(uname -r)/modules.load.recovery" | while read line; do
+        set -- $line
+        # Skip commented entries
+        [ "$1" = "#" ] && continue
+        tell_kmsg "Loading $1"
+        modprobe -v -a "$1" > /dev/kmsg 2>&1
+    done
+}
+
 load_adsp() {
     # It seems recent Qualcomm SoC devices with PMIC Glink require aDSP
     # firmware loaded for PMIC and Type-C port to work.
@@ -140,6 +154,8 @@ load_adsp() {
 usb_setup() {
     mkdir /config || true
     mount -t configfs none /config || true
+
+    load_recovery_kernel_modules
 
     if grep -q "androidboot.hardware = \"qcom\"" /proc/bootconfig 2>/dev/null; then
         # Attempt to boot aDSP if running on a Qualcomm SoC
