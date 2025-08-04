@@ -435,7 +435,7 @@ load_kernel_modules() {
 
 	tell_kmsg "Loading kernel modules from $(pwd)"
 
-	modprobe msm_drm "dsi_display0=qcom,mdss_dsi_rm692e5_boe_amoled_cmd:"
+	modprobe msm_drm "dsi_display0=qcom,mdss_dsi_rm692e5_visionox_amoled_120hz_cmd:"
 
 	cat modules.load | while read line; do
 		set -- $line
