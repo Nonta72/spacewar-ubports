@@ -27,3 +27,4 @@ deviceinfo_bootimg_partition_size="100663296"
 
 # deviceinfo_prebuilt_dtbo="dtbo.img"
 deviceinfo_rootfs_image_sector_size="4096"
+
