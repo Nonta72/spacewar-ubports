@@ -152,7 +152,7 @@ ro.odm.build.version.sdk=30
 ro.product.odm.brand=Nothing
 ro.product.odm.device=Spacewar
 ro.product.odm.manufacturer=Nothing
-ro.product.odm.model=Spacewar
+ro.product.odm.model=A063
 ro.product.odm.name=lineage_Spacewar
 # end common build properties
 #
@@ -174,7 +174,7 @@ ro.product.build.version.sdk=30
 ro.product.product.brand=Nothing
 ro.product.product.device=Spacewar
 ro.product.product.manufacturer=Nothing
-ro.product.product.model=Spacewar
+ro.product.product.model=A063
 ro.product.product.name=lineage_Spacewar
 # end common build properties
 #
@@ -198,7 +198,7 @@ ro.system_ext.build.version.sdk=30
 ro.product.system_ext.brand=Nothing
 ro.product.system_ext.device=Spacewar
 ro.product.system_ext.manufacturer=Nothing
-ro.product.system_ext.model=Nothing
+ro.product.system_ext.model=A063
 ro.product.system_ext.name=lineage_Spacewar
 # end common build properties
 
