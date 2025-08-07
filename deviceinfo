@@ -7,7 +7,7 @@ deviceinfo_kernel_defconfig="gki_defconfig vendor/lahaina_ALLYES_GKI.config vend
 deviceinfo_kernel_cmdline="console=tty0 androidboot.hardware=qcom androidboot.memcg=1 lpm_levels.sleep_disabled=1 service_locator.enable=1 androidboot.usbcontroller=a600000.dwc3 swiotlb=0 loop.max_part=7 cgroup.memory=nokmem,nosocket pcie_ports=compat iptable_raw.raw_before_defrag=1 ip6table_raw.raw_before_defrag=1"
 deviceinfo_kernel_clang_compile="true"
 deviceinfo_kernel_llvm_compile="true"
-deviceinfo_halium_version="11"
+deviceinfo_halium_version="13"
 deviceinfo_ramdisk_compression="lz4"
 deviceinfo_kernel_image_name="Image"
 
