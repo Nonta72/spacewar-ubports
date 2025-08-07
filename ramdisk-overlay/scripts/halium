@@ -435,14 +435,14 @@ load_kernel_modules() {
 
 	tell_kmsg "Loading kernel modules from $(pwd)"
 
-	modprobe msm_drm "dsi_display0=qcom,mdss_dsi_rm692e5_visionox_amoled_120hz_cmd:"
-
-	cat modules.load | while read line; do
-		set -- $line
-		# Skip commented entries
-		[ "$1" = "#" ] && continue
-		modprobe -a "$1"
-	done
+	# Removed: modprobe msm_drm "dsi_display0=...". Not entirely sure if visionox panel can be handled that way. Need testing to confirm
+	if [ -f modules.load ]; then
+		cat modules.load | while read line; do
+			set -- $line
+			[ "$1" = "#" ] && continue
+			modprobe -a "$1"
+		done
+	fi
 
 	cd -
 }
