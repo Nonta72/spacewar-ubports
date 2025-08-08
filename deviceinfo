@@ -8,8 +8,7 @@ deviceinfo_kernel_cmdline="androidboot.hardware=qcom androidboot.memcg=1 lpm_lev
 deviceinfo_kernel_clang_compile="true"
 deviceinfo_kernel_llvm_compile="true"
 deviceinfo_halium_version="11"
-deviceinfo_prebuilt_boot_ramdisk="ramdisk.img"
-deviceinfo_ramdisk_compression="gz"
+deviceinfo_ramdisk_compression="gzip"
 deviceinfo_kernel_image_name="Image"
 
 deviceinfo_flash_pagesize="4096"
