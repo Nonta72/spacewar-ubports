@@ -435,14 +435,34 @@ load_kernel_modules() {
 
 	tell_kmsg "Loading kernel modules from $(pwd)"
 
-	# Removed: modprobe msm_drm "dsi_display0=...". Not entirely sure if visionox panel can be handled that way. Need testing to confirm
-	if [ -f modules.load ]; then
-		cat modules.load | while read line; do
-			set -- $line
-			[ "$1" = "#" ] && continue
-			modprobe -a "$1"
+	cat modules.load | while read line; do
+		set -- $line
+		# Skip commented entries
+		[ "$1" = "#" ] && continue
+		modprobe -a "$1"
+		tell_kmsg "load_kernel_modules $1: $(modprobe -a $1 2>&1)"
 		done
 	fi
+
+	cd -
+}
+
+load_vendor_modules() {
+	ab_slot_suffix=$1
+
+	mkdir -p /vendor
+	mount -o ro /dev/mapper/vendor_{ab_slot_suffix} /vendor
+	cp /vendor/lib/modules/* /lib/modules/
+	ln -sf /lib/modules /lib/modules/$(uname -r)
+
+	cd /lib/modules
+
+	cat modules.load | while read line; do
+		set -- $line
+		# Skip commented entries
+		[ "$1" = "#" ] && continue
+		tell_kmsg "load_vendor_modules $1: $(modprobe -a $1 2>&1)"
+	done
 
 	cd -
 }
@@ -569,6 +589,10 @@ mountroot() {
 		_syspart="${_syspart}${ab_slot_suffix}"
 		tell_kmsg "system partition is at $_syspart"
 	fi
+
+	mkdir -p /vendor/lib
+	ln -sf /lib/modules /vendor/lib/modules
+	load_vendor_modules $ab_slot_suffix
 
 	# If both $imagefile and $_syspart are set, something is wrong. The strange
 	# output from this could be a clue in that situation.
