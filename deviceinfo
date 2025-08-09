@@ -9,6 +9,7 @@ deviceinfo_kernel_clang_compile="true"
 deviceinfo_kernel_llvm_compile="true"
 deviceinfo_halium_version="11"
 deviceinfo_ramdisk_compression="gzip"
+deviceinfo_prebuilt_boot_ramdisk="prebuild_ramdisk.img"
 deviceinfo_kernel_image_name="Image"
 
 deviceinfo_flash_pagesize="4096"
