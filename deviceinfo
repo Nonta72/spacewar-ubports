@@ -9,7 +9,9 @@ deviceinfo_kernel_clang_compile="true"
 deviceinfo_kernel_llvm_compile="true"
 deviceinfo_halium_version="11"
 deviceinfo_ramdisk_compression="gzip"
-deviceinfo_prebuilt_boot_ramdisk="prebuild_ramdisk.img"
+# build script stil downloads generic ramdisk. we want to force it to use the prebult ramdisk or download it from its location
+deviceinfo_prebuilt_boot_ramdisk="halium-boot-ramdisk.img"
+deviceinfo_prebuilt_boot_ramdisk_source="https://github.com/Nonta72/spacewar-ubports/raw/refs/heads/main/halium-boot-ramdisk.img"
 deviceinfo_kernel_image_name="Image"
 
 deviceinfo_flash_pagesize="4096"
