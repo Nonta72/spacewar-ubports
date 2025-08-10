@@ -9,7 +9,6 @@ fc0011.ko
 fc0012.ko
 fc0013.ko
 fc2580.ko
-fts_tp.ko
 goodix_fp.ko
 hdmi_dlkm.ko
 hid-aksys.ko
@@ -21,7 +20,6 @@ max2165.ko
 mbhc_dlkm.ko
 mc44s803.ko
 msi001.ko
-msm_drm.ko
 mt2060.ko
 mt2063.ko
 mt20xx.ko
