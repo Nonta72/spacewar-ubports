@@ -32,6 +32,9 @@ echo $KERNEL_DIR
 
 cd "$TMPDOWN/$KERNEL_DIR"
 
+# Clone kernel subfolder repositories
+[ -d arch/arm64/boot/dts ] || git clone https://github.com/NothingOSS/android_kernel_devicetree_nothing_sm7325 -b sm7325/t vendor
+
 # Generate lahaina_ALLYES_GKI.config from lahaina_GKI.config
 ./scripts/gki/fragment_allyesconfig.sh arch/arm64/configs/vendor/lahaina_GKI.config arch/arm64/configs/vendor/lahaina_ALLYES_GKI.config
 
