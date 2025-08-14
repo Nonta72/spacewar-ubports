@@ -8,7 +8,9 @@ deviceinfo_kernel_cmdline="console=ttyMSM0,115200n8 androidboot.hardware=qcom an
 deviceinfo_kernel_clang_compile="true"
 deviceinfo_kernel_llvm_compile="true"
 deviceinfo_halium_version="11"
-
+deviceinfo_ramdisk_compression="gzip"
+# The build script stil downloads generic ramdisk. We want to force it to use the prebult ramdisk or download it from its location
+deviceinfo_prebuilt_boot_ramdisk_source="https://github.com/Nonta72/spacewar-ubports/raw/refs/heads/main/initrdv2.img"
 deviceinfo_flash_pagesize="4096"
 deviceinfo_flash_offset_base="0x00000000"
 deviceinfo_flash_offset_kernel="0x00008000"
