@@ -767,8 +767,6 @@ mountroot() {
 		halium_panic "Couldn't find a system partition."
 	fi
 
-  halium_panic "Test panic"
-
 	[ "$quiet" != "y" ] && log_begin_msg "Running /scripts/local-bottom"
 	run_scripts /scripts/local-bottom
 	[ "$quiet" != "y" ] && log_end_msg
