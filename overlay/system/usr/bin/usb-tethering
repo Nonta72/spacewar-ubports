@@ -37,7 +37,8 @@ usb_setup_configfs() {
     write $GADGET_DIR/g1/strings/0x409/product      "$USB_IPRODUCT"
 
     if echo $USB_FUNCTIONS | grep -q "rndis"; then
-        mkdir $GADGET_DIR/g1/functions/ncm.usb0
+        mkdir $GADGET_DIR/g1/functions/rndis.usb0
+        mkdir $GADGET_DIR/g1/functions/rndis_bam.rndis
     fi
     echo $USB_FUNCTIONS | grep -q "mass_storage" && mkdir $GADGET_DIR/g1/functions/storage.0
 
@@ -46,7 +47,8 @@ usb_setup_configfs() {
     write $GADGET_DIR/g1/configs/c.1/strings/0x409/configuration "$USB_FUNCTIONS"
 
     if echo $USB_FUNCTIONS | grep -q "rndis"; then
-        ln -s $GADGET_DIR/g1/functions/ncm.usb0 $GADGET_DIR/g1/configs/c.1
+        ln -s $GADGET_DIR/g1/functions/rndis.usb0 $GADGET_DIR/g1/configs/c.1
+        ln -s $GADGET_DIR/g1/functions/rndis_bam.rndis $GADGET_DIR/g1/configs/c.1
     fi
     echo $USB_FUNCTIONS | grep -q "mass_storage" && ln -s $GADGET_DIR/g1/functions/storage.0 $GADGET_DIR/g1/configs/c.1
 
