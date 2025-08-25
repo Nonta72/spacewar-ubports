@@ -42,7 +42,7 @@ ln -s ../../../drivers/pinctrl/core.h core.h
 
 # Clone QCACLD-3.0 from FP5 repositories
 
-cd "$TMPDOWN/$KERNEL_DIR"
+cd ../../../
 
 BRANCH="kernel/13/fp5"
 GERRIT_URL="https://gerrit-public.fairphone.software"
