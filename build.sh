@@ -32,16 +32,30 @@ echo $KERNEL_DIR
 
 cd "$TMPDOWN/$KERNEL_DIR/arch/arm64/boot/dts"
 
-# Clone kernel subfolder repositories
+# Clone DTS from NothingOSS into dts/vendor
 git clone https://github.com/NothingOSS/android_kernel_devicetree_nothing_sm7325 -b sm7325/t vendor
 
+# Fix broken NothingOSS symlinks
 cd ../../../../techpack/audio/soc && rm -rf core.h && rm -rf pinctrl-utils.h
 ln -s ../../../drivers/pinctrl/pinctrl-utils.h pinctrl-utils.h
 ln -s ../../../drivers/pinctrl/core.h core.h
-cd ../../../
+
+# Clone QCACLD-3.0 from FP5 repositories
+
+cd "$TMPDOWN/$KERNEL_DIR"
+
+BRANCH="kernel/13/fp5"
+GERRIT_URL="https://gerrit-public.fairphone.software"
+PLATFORM_VENDOR_URL="${GERRIT_URL}/platform/vendor"
+
+[ -d drivers/staging/wlan-qc/fw-api ] || git clone -b ${BRANCH} ${PLATFORM_VENDOR_URL}/qcom-opensource/wlan/fw-api drivers/staging/wlan-qc/fw-api
+[ -d drivers/staging/wlan-qc/qca-wifi-host-cmn ] || git clone -b ${BRANCH} ${PLATFORM_VENDOR_URL}/qcom-opensource/wlan/qca-wifi-host-cmn drivers/staging/wlan-qc/qca-wifi-host-cmn
+[ -d drivers/staging/wlan-qc/qcacld-3.0 ] || git clone -b ${BRANCH} ${PLATFORM_VENDOR_URL}/qcom-opensource/wlan/qcacld-3.0 drivers/staging/wlan-qc/qcacld-3.0
 
 # Generate lahaina_ALLYES_GKI.config from lahaina_GKI.config
 #./scripts/gki/fragment_allyesconfig.sh arch/arm64/configs/vendor/lahaina_GKI.config arch/arm64/configs/vendor/lahaina_ALLYES_GKI.config
+
+# Launch the build script !
 
 cd "$HERE"
 
