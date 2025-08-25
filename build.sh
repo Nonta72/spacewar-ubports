@@ -42,15 +42,16 @@ ln -s ../../../drivers/pinctrl/core.h core.h
 
 # Clone QCACLD-3.0 from FP5 repositories
 
-cd ../../../
+cd ../../../drivers/staging
 
 BRANCH="kernel/13/fp5"
 GERRIT_URL="https://gerrit-public.fairphone.software"
 PLATFORM_VENDOR_URL="${GERRIT_URL}/platform/vendor"
 
-[ -d drivers/staging/wlan-qc/fw-api ] || git clone -b ${BRANCH} ${PLATFORM_VENDOR_URL}/qcom-opensource/wlan/fw-api drivers/staging/wlan-qc/fw-api
-[ -d drivers/staging/wlan-qc/qca-wifi-host-cmn ] || git clone -b ${BRANCH} ${PLATFORM_VENDOR_URL}/qcom-opensource/wlan/qca-wifi-host-cmn drivers/staging/wlan-qc/qca-wifi-host-cmn
-[ -d drivers/staging/wlan-qc/qcacld-3.0 ] || git clone -b ${BRANCH} ${PLATFORM_VENDOR_URL}/qcom-opensource/wlan/qcacld-3.0 drivers/staging/wlan-qc/qcacld-3.0
+mkdir wlan-qc && cd wlan-qc
+git clone -b ${BRANCH} ${PLATFORM_VENDOR_URL}/qcom-opensource/wlan/fw-api fw-api
+git clone -b ${BRANCH} ${PLATFORM_VENDOR_URL}/qcom-opensource/wlan/qca-wifi-host-cmn qca-wifi-host-cmn
+git clone -b ${BRANCH} ${PLATFORM_VENDOR_URL}/qcom-opensource/wlan/qcacld-3.0 qcacld-3.0
 
 # Generate lahaina_ALLYES_GKI.config from lahaina_GKI.config
 #./scripts/gki/fragment_allyesconfig.sh arch/arm64/configs/vendor/lahaina_GKI.config arch/arm64/configs/vendor/lahaina_ALLYES_GKI.config
