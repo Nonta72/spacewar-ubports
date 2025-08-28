@@ -14,6 +14,9 @@ done
 
 [ -d build ] || git clone https://gitlab.com/ubports/community-ports/halium-generic-adaptation-build-tools build
 
+# Grab full fp5 kernel source from halium gitlab
+git clone https://gitlab.com/ubports/porting/reference-device-ports/android11/fairphone-5/kernel-fairphone-qcm6490.git -b halium-11.0-rebase $HOME/fp5
+
 HERE=$(pwd)
 SCRIPT="$(dirname "$(realpath "$0")")"/build
 if [ ! -d "$SCRIPT" ]; then
@@ -40,18 +43,13 @@ cd ../../../../techpack/audio/soc && rm -rf core.h && rm -rf pinctrl-utils.h
 ln -s ../../../drivers/pinctrl/pinctrl-utils.h pinctrl-utils.h
 ln -s ../../../drivers/pinctrl/core.h core.h
 
-# Clone QCACLD-3.0 from FP5 repositories
+# Use QCA_CLD3 from fp5 halium (too lazy to cherry-pick every single commit and yes, won't probably work)
 
-cd ../../../drivers/staging
-
-BRANCH="kernel/13/fp5"
-GERRIT_URL="https://gerrit-public.fairphone.software"
-PLATFORM_VENDOR_URL="${GERRIT_URL}/platform/vendor"
-
-mkdir wlan-qc && cd wlan-qc
-git clone -b ${BRANCH} ${PLATFORM_VENDOR_URL}/qcom-opensource/wlan/fw-api fw-api
-git clone -b ${BRANCH} ${PLATFORM_VENDOR_URL}/qcom-opensource/wlan/qca-wifi-host-cmn qca-wifi-host-cmn
-git clone -b ${BRANCH} ${PLATFORM_VENDOR_URL}/qcom-opensource/wlan/qcacld-3.0 qcacld-3.0
+WLAN_DRV_DIR="$HOME/fp5/drivers/staging"
+DEST_DIR="$TMPDOWN/$KERNEL_DIR/drivers/stating"
+cp -R "$WLAN_DRV_DIR/fw-api" "$DEST_DIR"
+cp -R "$WLAN_DRV_DIR/qca-wifi-host-cmn" "$DEST_DIR"
+cp -R "$WLAN_DRV_DIR/qcacld-3.0" "$DEST_DIR"
 
 # Generate lahaina_ALLYES_GKI.config from lahaina_GKI.config
 #./scripts/gki/fragment_allyesconfig.sh arch/arm64/configs/vendor/lahaina_GKI.config arch/arm64/configs/vendor/lahaina_ALLYES_GKI.config
