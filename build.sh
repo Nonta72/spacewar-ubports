@@ -45,8 +45,11 @@ ln -s ../../../drivers/pinctrl/core.h core.h
 
 # Use QCA_CLD3 from fp5 halium (too lazy to cherry-pick every single commit and yes, won't probably work)
 
-WLAN_DRV_DIR="$HOME/fp5/drivers/staging"
-DEST_DIR="$TMPDOWN/$KERNEL_DIR/drivers/stating"
+# This assumes you cloned THIS repo into $HOME/halium/spacewar-ubports
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT="$HOME/halium/spacewar-ubports"
+DEST_DIR="$PROJECT_ROOT/workdir/downloads/$KERNEL_DIR/drivers/staging"
+
 cp -R "$WLAN_DRV_DIR/fw-api" "$DEST_DIR"
 cp -R "$WLAN_DRV_DIR/qca-wifi-host-cmn" "$DEST_DIR"
 cp -R "$WLAN_DRV_DIR/qcacld-3.0" "$DEST_DIR"
