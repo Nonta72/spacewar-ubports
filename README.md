@@ -16,6 +16,7 @@ Current status :
 - [x] Double tap to wake
 - [x] Flashlight
 - [x] Video playback
+- [ ] UDFPS (Underdispay fingerprint sensor)
 - [ ] hfd-service (vibration and such)
 - [ ] Camera
 - [ ] Glyphs (not sure how to fix these)
