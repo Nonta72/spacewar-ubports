@@ -14,9 +14,6 @@ done
 
 [ -d build ] || git clone https://gitlab.com/ubports/community-ports/halium-generic-adaptation-build-tools build
 
-# Grab full fp5 kernel source from halium gitlab
-git clone https://gitlab.com/ubports/porting/reference-device-ports/android11/fairphone-5/kernel-fairphone-qcm6490.git -b halium-11.0-rebase $HOME/fp5
-
 HERE=$(pwd)
 SCRIPT="$(dirname "$(realpath "$0")")"/build
 if [ ! -d "$SCRIPT" ]; then
@@ -43,23 +40,61 @@ cd ../../../../techpack/audio/soc && rm -rf core.h && rm -rf pinctrl-utils.h
 ln -s ../../../drivers/pinctrl/pinctrl-utils.h pinctrl-utils.h
 ln -s ../../../drivers/pinctrl/core.h core.h
 
-# Use QCA_CLD3 and BT Stack backport from fp5 halium (too lazy to cherry-pick every single commit and yes, won't probably work)
+cd "$TMPDOWN/$KERNEL_DIR"
 
-# This assumes you cloned THIS repo into $HOME/halium/spacewar-ubports
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PROJECT_ROOT="$HOME/halium/spacewar-ubports"
-WLAN_DRV_DIR="$HOME/fp5/drivers/staging"
-DEST_DIR="$PROJECT_ROOT/workdir/downloads/$KERNEL_DIR/drivers/staging"
-BT_DRV_DIR="$HOME/fp5"
-DEST_DIR_BT="$PROJECT_ROOT/workdir/downloads/$KERNEL_DIR"
+# Create Droidian config fragment on build time
+echo "Creating Droidian kernel config fragment ..."
+cat > arch/arm64/configs/vendor/droidian.config << 'DROIDIAN_EOF'
+# Droidian required kernel options
+CONFIG_DEVTMPFS=y
+CONFIG_VT=y
+CONFIG_NAMESPACES=y
+CONFIG_MODULES=y
+CONFIG_DEVPTS_MULTIPLE_INSTANCES=y
+CONFIG_USB_CONFIGFS_RNDIS=y
+CONFIG_USB_CONFIGFS_RMNET_BAM=y
+CONFIG_USB_CONFIGFS_MASS_STORAGE=y
+CONFIG_INIT_STACK_ALL_ZERO=y
+CONFIG_ANDROID_PARANOID_NETWORK=n
+CONFIG_ANDROID_BINDERFS=n
 
-# Copy QCA_CLD3 files
-cp -R "$WLAN_DRV_DIR/fw-api" "$DEST_DIR"
-cp -R "$WLAN_DRV_DIR/qca-wifi-host-cmn" "$DEST_DIR"
-cp -R "$WLAN_DRV_DIR/qcacld-3.0" "$DEST_DIR"
+# Namespace support
+CONFIG_SYSVIPC=y
+CONFIG_PID_NS=y
+CONFIG_IPC_NS=y
+CONFIG_UTS_NS=y
 
-# Copy BT Stack backport files
-cp -R "$BT_DRV_DIR/backports" "$DEST_DIR_BT"
+# Bluetooth support
+CONFIG_BT=y
+CONFIG_BT_HIDP=y
+CONFIG_BT_RFCOMM=y
+CONFIG_BT_RFCOMM_TTY=y
+CONFIG_BT_BNEP=y
+CONFIG_BT_BNEP_MC_FILTER=y
+CONFIG_BT_BNEP_PROTO_FILTER=y
+CONFIG_BT_HCIVHCI=y
+
+# Waydroid support
+CONFIG_SW_SYNC_USER=y
+CONFIG_NET_CLS_CGROUP=y
+CONFIG_CGROUP_NET_CLASSID=y
+CONFIG_VETH=y
+CONFIG_NETFILTER_XT_TARGET_CHECKSUM=y
+CONFIG_ANDROID_BINDER_DEVICES="binder,hwbinder,vndbinder,anbox-binder,anbox-hwbinder,anbox-vndbinder"
+
+# Debug support
+CONFIG_PSTORE=y
+CONFIG_PSTORE_CONSOLE=y
+CONFIG_PSTORE_RAM=y
+CONFIG_PSTORE_RAM_ANNOTATION_APPEND=y
+
+DROIDIAN_EOF
+echo "Droidian config fragment created at arch/arm64/configs/vendor/droidian.config"
+echo "Configuration includes:"
+echo "- Basic Droidian requirements" 
+echo "- Bluetooth support"
+echo "- Waydroid support"
+echo "- Namespace support"
 
 # Generate lahaina_ALLYES_GKI.config from lahaina_GKI.config
 #./scripts/gki/fragment_allyesconfig.sh arch/arm64/configs/vendor/lahaina_GKI.config arch/arm64/configs/vendor/lahaina_ALLYES_GKI.config
