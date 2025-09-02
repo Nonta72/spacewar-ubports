@@ -24,7 +24,16 @@ jobs:
             g++-multilib mingw-w64-i686-dev tofrodos python3-markdown \
             libxml2-utils xsltproc zlib1g-dev:i386 schedtool liblz4-tool bc lzop \
             imagemagick libncurses5 rsync python-is-python3 python2 ca-certificates \
-            cpio kmod libssl-dev libtinfo5 unzip wget xz-utils img2simg jq
+            cpio kmod libssl-dev libtinfo5 unzip wget xz-utils img2simg jq \
+            libguestfs-tools
+
+      - name: Setup CI mount wrapper
+        run: |
+          mkdir -p ci-bin
+          cp ci-mount.sh ci-bin/mount
+          cp ci-mount.sh ci-bin/umount
+          chmod +x ci-bin/mount ci-bin/umount
+          echo "$(pwd)/ci-bin" >> $GITHUB_PATH
 
       - name: Run main build script
         run: |
