@@ -1,0 +1,58 @@
+name: Ubuntu Touch Image Build
+
+on:
+  workflow_dispatch:  # manual trigger
+  schedule:
+    - cron: "0 6 * * 6"  # Every Saturday at 06:00 UTC
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y \
+            git gnupg flex bison gperf build-essential zip bzr curl \
+            libc6-dev libncurses5-dev:i386 x11proto-core-dev libx11-dev:i386 \
+            libreadline6-dev:i386 libgl1-mesa-glx:i386 libgl1-mesa-dev \
+            g++-multilib mingw-w64-i686-dev tofrodos python3-markdown \
+            libxml2-utils xsltproc zlib1g-dev:i386 schedtool liblz4-tool bc lzop \
+            imagemagick libncurses5 rsync python-is-python3 python2 ca-certificates \
+            cpio kmod libssl-dev libtinfo5 unzip wget xz-utils img2simg jq
+
+      - name: Run main build script
+        run: |
+          ./build.sh
+
+      - name: Prepare fake OTA
+        run: |
+          ./build/prepare-fake-ota.sh out/device_Spacewar_usrmerge.tar.xz ota
+
+      - name: Generate rootfs.img
+        run: |
+          ./build/system-image-from-ota.sh ota/ubuntu_command
+
+      - name: Package artifacts
+        run: |
+          cd images
+          mv rootfs.img ubuntu.img
+          tar -cJf Spacewar_rootfs.tar.xz ubuntu.img
+          tar -cJf Spacewar_haliumboot.tar.xz boot.img vendor_boot.img
+
+      - name: Upload rootfs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Spacewar_rootfs
+          path: images/Spacewar_rootfs.tar.xz
+
+      - name: Upload haliumboot artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Spacewar_haliumboot
+          path: images/Spacewar_haliumboot.tar.xz
