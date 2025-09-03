@@ -12,7 +12,7 @@ for ((i=0; i<"${#args[@]}"; ++i)); do
     esac
 done
 
-[ -d build ] || git clone https://gitlab.com/ubports/Nonta72/halium-generic-adaptation-build-toolss build
+[ -d build ] || git clone https://gitlab.com/Nonta72/halium-generic-adaptation-build-toolss build
 
 HERE=$(pwd)
 SCRIPT="$(dirname "$(realpath "$0")")"/build
