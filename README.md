@@ -30,6 +30,8 @@ Current status :
 - [x] Shutdown / Reboot
 - [x] Auto-rotation
 - [x] Secure lockscreen (i.e setting a passcode = settings crash). You must setup password on first boot, otherwise settings will crash if you try to set it up later on.
+- [x] Camera (front & back)
+- [x] Video recording
 
 Untested :
 - [ ] NFC (seems to work)
@@ -41,7 +43,6 @@ Untested :
 Currently broken :
 - [ ] UDFPS (Underdispay fingerprint sensor)
 - [ ] Vibration (working on a fix)
-- [ ] Camera (trying to get it working but not easy)
 - [ ] Glyphs (not sure how to fix these)
 - [ ] Auto-brightness (will work on a fix)
 - [ ] Waydroid (it installs but gets stuck on loading screen. Working on a fix)
