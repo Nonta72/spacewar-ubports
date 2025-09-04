@@ -12,7 +12,7 @@ for ((i=0; i<"${#args[@]}"; ++i)); do
     esac
 done
 
-[ -d build ] || git clone https://gitlab.com/Nonta72/halium-generic-adaptation-build-toolss build
+[ -d build ] || git clone https://gitlab.com/ubports/porting/community-ports/halium-generic-adaptation-build-tools build
 
 HERE=$(pwd)
 SCRIPT="$(dirname "$(realpath "$0")")"/build
@@ -32,7 +32,14 @@ echo $KERNEL_DIR
 
 cd "$TMPDOWN/$KERNEL_DIR/arch/arm64/boot/dts"
 
-# Clone DTS from NothingOSS into dts/vendor
+# Remove existing directory if it exists
+if [ -d "vendor" ]; then
+    echo "Directory 'vendor' already exists. Removing it ..."
+    rm -rf vendor
+fi
+
+# Clone fresh copy from NothingOSS
+echo "Cloning fresh copy of kernel tree ..."
 git clone https://github.com/NothingOSS/android_kernel_devicetree_nothing_sm7325 -b sm7325/t vendor
 
 # Fix broken NothingOSS symlinks
