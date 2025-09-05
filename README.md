@@ -29,9 +29,10 @@ Current status :
 - [x] RTC Time
 - [x] Shutdown / Reboot
 - [x] Auto-rotation
-- [x] Secure lockscreen (i.e setting a passcode = settings crash). You must setup password on first boot, otherwise settings will crash if you try to set it up later on.
+- [x] Secure lockscreen
 - [x] Camera (front & back)
 - [x] Video recording
+- [x] Waydroid
 
 Untested :
 - [ ] NFC (seems to work)
@@ -41,10 +42,9 @@ Untested :
 - [ ] 120Hz display refresh rate
 
 Currently broken :
-- [ ] UDFPS (Underdispay fingerprint sensor)
 - [ ] Vibration (working on a fix)
-- [ ] Glyphs (not sure how to fix these)
 - [ ] Auto-brightness (will work on a fix)
-- [ ] Waydroid (it installs but gets stuck on loading screen. Working on a fix)
 
-
+Unsupported (won't/can't fix) :
+- [ ] UDFPS (Underdispay fingerprint is apparently not supported by UT)
+- [ ] Glyphs (not sure how to fix these)
