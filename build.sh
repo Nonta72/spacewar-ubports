@@ -47,6 +47,8 @@ cd ../../../../techpack/audio/soc && rm -rf core.h && rm -rf pinctrl-utils.h
 ln -s ../../../drivers/pinctrl/pinctrl-utils.h pinctrl-utils.h
 ln -s ../../../drivers/pinctrl/core.h core.h
 
+cd ../../../
+
 # Generate lahaina_ALLYES_GKI.config from lahaina_GKI.config
 ./scripts/gki/fragment_allyesconfig.sh arch/arm64/configs/vendor/lahaina_GKI.config arch/arm64/configs/vendor/lahaina_ALLYES_GKI.config
 
