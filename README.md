@@ -1,5 +1,5 @@
-Attempt to get Ubports working on Nothing Phone 1 (Spacewar)
-This tree is based on Fairphone 5 (fp5) on Ubports Gitlab reference port (halium 11)
+Welcome to Ubuntu Touch for Nothing Phone 1 (Spacewar)
+This tree is deeply based on Fairphone 5 (fp5) on Ubports Gitlab reference port (halium 11)
 
 Current status :
 - [x] Boots into UI !
@@ -9,7 +9,7 @@ Current status :
 - [x] Touchscreen
 - [x] RIL (SMS and calls)
 - [x] Mobile data (tested up to 4G, I don't have 5G)
-- [x] SSH
+- [x] USB SSH
 - [x] Ubports recovery with adb
 - [x] Touchscreen in recovery mode
 - [x] Wi-Fi
@@ -25,34 +25,41 @@ Current status :
 - [x] Flashlight
 - [x] Hardware video playback
 - [x] AppArmor
-- [x] Offline charging
-- [x] Online charging
+- [x] Online and offline charging
 - [x] RTC Time
 - [x] Shutdown / Reboot
-- [x] Auto-rotation (buggy, see below)
+- [x] Auto-rotation
 - [x] Secure lockscreen
 - [x] Camera (front & back)
 - [x] Video recording
 - [x] Waydroid & Libertine containers
+- [x] Sensor (Accelerometer/Gyroscope)
+- [x] Wireless externl display
+- [x] MTP & ADB in userspace (you must be on a Linux host to access MTP)
 
 - Unstable / Bugs :
-- [ ] Mobile network disconnects and reconnects sometimes
-- [ ] Auto-rotation is unreliable (doesn't always work)
-- [ ] Camera quality is far behind Android
+- [ ] Camera quality is far behind Android (also limited to 12MP)
 - [ ] Battery life isn't as on Android (but still good enough)
+- [ ] Auto-brightness works but it's not stable/accurate
 
 Untested :
 - [ ] NFC (seems to work)
 - [ ] VoLTE (should work)
-- [ ] MTP & ADB (will be fixed soon)
-- [ ] Wired and wireless external monitor
-- [ ] 120Hz display refresh rate
+- [ ] Wired external monitor (e.g HDMI)
 
 Currently broken :
 - [ ] Vibration (working on a fix)
-- [ ] Auto-brightness (will work on a fix)
+- [ ] 90Hz and 120Hz display refresh rate
 
 Unsupported (won't/can't fix) :
 - [ ] UDFPS (Underdispay fingerprint is apparently not supported by UT)
 - [ ] Glyphs (not sure how to fix these)
 - [ ] Dual Sim functionnaly (only 1 SIM at a time)
+
+Credits and thanks :
+- Ubports Team,
+- NotKit
+- Muhammad23012009
+- deathmist
+- abkro (for his patches on OnePlus 8T regarding audio bringup)
+- Anyone else I may have forgotten !
