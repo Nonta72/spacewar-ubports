@@ -2,8 +2,6 @@ name: Ubuntu Touch Image Build
 
 on:
   workflow_dispatch:  # manual trigger
-  schedule:
-    - cron: "0 6 * * 6"  # Every Saturday at 06:00 UTC
 
 jobs:
   build:
