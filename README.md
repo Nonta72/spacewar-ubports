@@ -36,19 +36,18 @@ Current status :
 - [x] Sensor (Accelerometer/Gyroscope)
 - [x] Wireless externl display
 - [x] MTP & ADB in userspace (you must be on a Linux host to access MTP)
+- [x] Vibration (partially fixed)
 
 - Unstable / Bugs :
 - [ ] Camera quality is far behind Android (also limited to 12MP)
 - [ ] Battery life isn't as on Android (but still good enough)
-- [ ] Auto-brightness works but it's not stable/accurate
+- [ ] Auto-brightness works but it's not stable/accurate (working on a fix)
 
 Untested :
 - [ ] NFC (seems to work)
 - [ ] VoLTE (should work)
-- [ ] Wired external monitor (e.g HDMI)
 
 Currently broken :
-- [ ] Vibration (working on a fix)
 - [ ] 90Hz and 120Hz display refresh rate
 
 Unsupported (won't/can't fix) :
