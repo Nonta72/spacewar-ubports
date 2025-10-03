@@ -24,7 +24,11 @@ jobs:
         run: |
           git clone https://gitlab.com/ubports/community-ports/halium-generic-adaptation-build-tools -b $ADAPTATION_TOOLS_BRANCH build
           ./build.sh
-
+      - name: Clean up to get more space
+        run: |
+          rm -rf workdir/downloads/KERNEL_OBJ
+          rm -rf workdir/downloads/android_kernel_msm-5.4_nothing_sm7325
+          
       - name: Build devel-flashable
         run: |
           DEVICE="$(source deviceinfo && echo $deviceinfo_codename)"
