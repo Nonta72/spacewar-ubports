@@ -1,0 +1,55 @@
+name: Build devel-flashable
+
+on:
+  workflow_dispatch:
+
+jobs:
+  devel-flashable:
+    runs-on: ubuntu-22.04
+    env:
+      ADAPTATION_TOOLS_BRANCH: main
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup build environment
+        run: |
+          sudo apt update
+          sudo apt install bc bison build-essential ca-certificates cpio curl fakeroot flex git img2simg jq kmod libssl-dev libtinfo5 lz4 python2 python3 sudo unzip wget xz-utils -y --no-install-recommends
+          sudo ln -sf python2 /usr/bin/python
+          sudo wget https://raw.githubusercontent.com/LineageOS/android_system_core/lineage-17.1/mkbootimg/mkbootimg.py -O /usr/bin/mkbootimg
+
+      - name: Build device tarball
+        run: |
+          git clone https://gitlab.com/ubports/community-ports/halium-generic-adaptation-build-tools -b $ADAPTATION_TOOLS_BRANCH build
+          ./build.sh
+
+      - name: Build devel-flashable
+        run: |
+          DEVICE="$(source deviceinfo && echo $deviceinfo_codename)"
+          ./build/prepare-fake-ota.sh out/device_${DEVICE}.tar.xz ota
+          mkdir -p out
+          ./build/system-image-from-ota.sh ota/ubuntu_command out
+          mv out/rootfs.img out/ubuntu.img
+
+      - name: Upload boot image to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: bootimage
+          path: out/boot.img
+          if-no-files-found: error
+
+      - name: Upload vendor_boot image to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: vendor_boot
+          path: out/vendor_boot.img
+          if-no-files-found: error
+
+      - name: Upload rootfs image to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rootfsimage
+          path: out/ubuntu.img
+          if-no-files-found: error
