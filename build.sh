@@ -30,24 +30,7 @@ KERNEL_DIR="$(basename "${deviceinfo_kernel_source}")"
 KERNEL_DIR="${KERNEL_DIR%.*}"
 echo $KERNEL_DIR
 
-cd "$TMPDOWN/$KERNEL_DIR/arch/arm64/boot/dts"
-
-# Remove existing directory if it exists
-if [ -d "vendor" ]; then
-    echo "Directory 'vendor' already exists. Removing it ..."
-    rm -rf vendor
-fi
-
-# Clone fresh copy from NothingOSS
-echo "Cloning fresh copy of kernel tree ..."
-git clone https://github.com/NothingOSS/android_kernel_devicetree_nothing_sm7325 -b sm7325/t vendor
-
-# Fix broken NothingOSS symlinks
-cd ../../../../techpack/audio/soc && rm -rf core.h && rm -rf pinctrl-utils.h
-ln -s ../../../drivers/pinctrl/pinctrl-utils.h pinctrl-utils.h
-ln -s ../../../drivers/pinctrl/core.h core.h
-
-cd ../../../
+cd "$TMPDOWN/$KERNEL_DIR"
 
 # Generate lahaina_ALLYES_GKI.config from lahaina_GKI.config
 ./scripts/gki/fragment_allyesconfig.sh arch/arm64/configs/vendor/lahaina_GKI.config arch/arm64/configs/vendor/lahaina_ALLYES_GKI.config
