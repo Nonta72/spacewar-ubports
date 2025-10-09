@@ -514,6 +514,12 @@ mountroot() {
 		halium_panic "Couldn't find data partition."
 	fi
 
+	# Format a wiped userdata without a filesystem header
+	if head -c 4096 $path | cmp /dev/zero 2>&1 | grep -q '^cmp: EOF on -$'; then
+		tell_kmsg "formatting wiped $path as ext4..."
+		mke2fs -t ext4 $path || halium_panic "Failed to format wiped userdata."
+	fi
+
 	tell_kmsg "checking filesystem integrity for the userdata partition"
 	# Mounting and umounting first, let the kernel handle the journal and
 	# orphaned inodes (faster than e2fsck). Then, just run e2fsck forcing -y.
