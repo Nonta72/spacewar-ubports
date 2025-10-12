@@ -12,7 +12,7 @@ for ((i=0; i<"${#args[@]}"; ++i)); do
     esac
 done
 
-[ -d build ] || git clone https://gitlab.com/ubports/community-ports/halium-generic-adaptation-build-tools build
+[ -d build ] || git clone https://gitlab.com/ubports/porting/community-ports/halium-generic-adaptation-build-tools build
 
 HERE=$(pwd)
 SCRIPT="$(dirname "$(realpath "$0")")"/build
@@ -26,18 +26,16 @@ source deviceinfo
 source "$SCRIPT/common_functions.sh"
 source "$SCRIPT/setup_repositories.sh" "${TMPDOWN}"
 
-<<<<<<< HEAD
-=======
 KERNEL_DIR="$(basename "${deviceinfo_kernel_source}")"
 KERNEL_DIR="${KERNEL_DIR%.*}"
 echo $KERNEL_DIR
 
 cd "$TMPDOWN/$KERNEL_DIR"
 
->>>>>>> c36a7c4 (Update build.sh to accommodate the rebased kernel)
 # Generate lahaina_ALLYES_GKI.config from lahaina_GKI.config
 ./scripts/gki/fragment_allyesconfig.sh arch/arm64/configs/vendor/lahaina_GKI.config arch/arm64/configs/vendor/lahaina_ALLYES_GKI.config
 
+# Launch the build script !
 cd "$HERE"
 
 ./build/build.sh "${args[@]}" -b "$BUILD_DIR"
