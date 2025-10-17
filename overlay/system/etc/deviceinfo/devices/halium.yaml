@@ -27,3 +27,4 @@ SPACEWAR:
   OfonoPlugin: binder
   OfonoImplementsIms: true
   FilesystemEncryption: true
+  RepowerdQtiPerfBooster: true
