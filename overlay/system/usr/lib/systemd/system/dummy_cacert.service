@@ -1,0 +1,19 @@
+[Unit]
+Description=A simple dummy cacert service implementation.
+After=lxc-android-config.service
+
+[Service]
+Type=notify
+ExecStart=/usr/sbin/dummy_cacert
+Restart=always
+TimeoutStartSec=60
+# Sandboxing
+CapabilityBoundingSet=CAP_DAC_READ_SEARCH
+NoNewPrivileges=yes
+PrivateNetwork=true
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target
