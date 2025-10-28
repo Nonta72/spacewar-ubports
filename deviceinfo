@@ -9,6 +9,8 @@ deviceinfo_kernel_cmdline="androidboot.hardware=qcom androidboot.memcg=1 lpm_lev
 deviceinfo_kernel_clang_compile="true"
 deviceinfo_kernel_llvm_compile="true"
 deviceinfo_halium_version="11"
+deviceinfo_ubuntu_touch_release="24.04-1.x"
+deviceinfo_system_partition_size="3500M"
 deviceinfo_ramdisk_compression="gzip"
 deviceinfo_flash_pagesize="4096"
 deviceinfo_flash_offset_base="0x00000000"
