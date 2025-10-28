@@ -1,0 +1,71 @@
+name: Build devel-flashable
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write  # required for creating releases
+
+jobs:
+  devel-flashable:
+    runs-on: ubuntu-22.04
+    env:
+      ADAPTATION_TOOLS_BRANCH: main
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup build environment
+        run: |
+          sudo apt update
+          sudo apt install bc bison build-essential ca-certificates cpio curl fakeroot flex git img2simg jq kmod libssl-dev libtinfo5 lz4 python2 python3 sudo unzip wget xz-utils tar -y --no-install-recommends
+          sudo ln -sf python2 /usr/bin/python
+          sudo wget https://raw.githubusercontent.com/LineageOS/android_system_core/lineage-17.1/mkbootimg/mkbootimg.py -O /usr/bin/mkbootimg
+
+      - name: Build device tarball
+        run: |
+          git clone https://gitlab.com/ubports/community-ports/halium-generic-adaptation-build-tools -b $ADAPTATION_TOOLS_BRANCH build
+          ./build.sh
+
+      - name: Clean up to get more space
+        run: |
+          rm -rf workdir/downloads/KERNEL_OBJ
+          rm -rf workdir/downloads/android_kernel_msm-5.4_nothing_sm7325
+          
+      - name: Build devel-flashable
+        run: |
+          DEVICE="$(source deviceinfo && echo $deviceinfo_codename)"
+          ./build/prepare-fake-ota.sh out/device_${DEVICE}.tar.xz ota
+          mkdir -p out
+          ./build/system-image-from-ota.sh ota/ubuntu_command out
+          mv out/rootfs.img out/ubuntu.img
+
+      # --- Pack all images into one tar.xz ---
+      - name: Create archive for release
+        run: |
+          cd out
+          tar -cJf UT-24.02_v3.tar.xz boot.img vendor_boot.img ubuntu.img
+          cd ..
+
+      # --- Upload the archive as build artifact (for CI logs) ---
+      - name: Upload the archive to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: UT-24.02_v3
+          path: out/UT-24.02_v3.tar.xz
+          if-no-files-found: error
+
+      # --- Publish to GitHub Releases ---
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "UT-24.02_v${{ github.run_number }}"
+          name: "Ubuntu Touch 24.02 Build #${{ github.run_number }}"
+          files: out/UT-24.02_v3.tar.xz
+          body: |
+            Automated build for ${{ github.repository }}
+            Commit: ${{ github.sha }}
+            Triggered by: ${{ github.actor }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
