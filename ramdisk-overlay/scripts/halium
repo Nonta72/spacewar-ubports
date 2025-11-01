@@ -449,7 +449,7 @@ load_kernel_modules() {
 
 mountroot() {
 	# list of possible userdata partition names
-	partlist="userdata UDA DATAFS USERDATA"
+	partlist="sda11 userdata"
 
 	pre_mountroot
 
