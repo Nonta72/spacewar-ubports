@@ -35,25 +35,32 @@ print
 ```
 7. Note down the End value and partition number of the partition userdata (should be 10).
 
-8. Run the following parted commands below.
+8. Run the following parted commands below. Note down that End? is subtracted by the amount you want to give in GB to Ubuntu Touch. ex. END_GB - 64 = NEW_END_GB, and the START_GB for ubtouch_data is NEW_END_GB.
 ```
+resizepart
+10
+<NEW_END_GB>
+yes
+ignore
 mkpart ubtouch_data
+ext4
+<USERDATA_END_GB>
+<OLD_USERDATA_END_GB>
 ```
-9. Note down that the START_GB is END_GB subtracted by the amount you want to give in GB to Ubuntu Touch. ex. END_GB - 64 = START_GB). Set the file system type to ext4, and type the START_GB that you calculated into "Start?" and the END_GB in "End?" then run this parted command to confirm that you created the partition successfully:
+9. Now confirm that you created the partition successfully:
 ```
 print
 quit
 ```
    It should show you a new partition with the number 11 called ubtouch_data.
-
 10. In the UBPorts recovery, click **Advanced** , then click **Reboot to recovery**.
-
 11. Use the mkfs.ext4 binary to format your new partition:
 ```
 ./mkfs.ext4 /dev/block/sda11
 ```
-12. Mount your new partition to /data and exit the adb device shell:
+12. In the UBPorts recovery, click **Advanced** , then click **Reboot to recovery**. Then, enter the adb shell to mount your new partition to /data and then exit:
 ```
+adb shell
 mount /data
 exit
 ```
