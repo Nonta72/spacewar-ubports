@@ -1,4 +1,4 @@
-name: Build devel-flashable
+name: Build UT images
 
 on:
   workflow_dispatch:
