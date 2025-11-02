@@ -12,10 +12,6 @@ deviceinfo_halium_version="11"
 deviceinfo_ubuntu_touch_release="24.04-1.x"
 deviceinfo_system_partition_size="5000M"
 deviceinfo_ramdisk_compression="gzip"
-
-# Download prebuilt ramdisk for the boot image
-deviceinfo_prebuilt_boot_ramdisk_source="https://github.com/Nonta72/nothing-spacewar/raw/refs/heads/dualboot/initrd.img-touch-arm64"
-
 deviceinfo_flash_pagesize="4096"
 deviceinfo_flash_offset_base="0x00000000"
 deviceinfo_flash_offset_kernel="0x00008000"
