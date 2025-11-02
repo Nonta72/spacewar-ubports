@@ -33,10 +33,9 @@
          backlight values for lux levels between these control points.
          Must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLevels">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
         <item>4</item>
+        <item>6</item>
+        <item>7</item>
         <item>8</item>
         <item>12</item>
         <item>20</item>
@@ -51,6 +50,7 @@
         <item>1808</item>
         <item>2981</item>
         <item>5000</item>
+        <item>8000</item>
         <item>10000</item>
     </integer-array>
 
