@@ -45,7 +45,7 @@ jobs:
       - name: Create archive for release
         run: |
           cd out
-          tar -cJf UT-24.02_v3.tar.xz boot.img vendor_boot.img ubuntu.img
+          tar -cJf UT-24.04_v3.tar.xz boot.img vendor_boot.img ubuntu.img
           cd ..
 
       # --- Upload the archive as build artifact (for CI logs) ---
@@ -60,12 +60,10 @@ jobs:
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "UT-24.02_v${{ github.run_number }}"
-          name: "Ubuntu Touch 24.02 Build #${{ github.run_number }}"
+          tag_name: "UT-24.04_v4"
+          name: "Ubuntu Touch 24.04 v4"
           files: out/UT-24.02_v3.tar.xz
           body: |
-            Automated build for ${{ github.repository }}
-            Commit: ${{ github.sha }}
-            Triggered by: ${{ github.actor }}
+            Ubuntu Touch 24.04 version 4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
