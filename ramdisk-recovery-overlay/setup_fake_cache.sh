@@ -12,7 +12,7 @@ while [ "$DATA_MOUNT_CODE" != "0" ]; do
     fi
     RETRY_COUNTER=$((RETRY_COUNTER+1))
 
-    mount /dev/block/bootdevice/by-name/userdata /data > /dev/kmsg
+    mount /dev/block/sda11 /data > /dev/kmsg
     DATA_MOUNT_CODE=$?
     sleep 1
 done
