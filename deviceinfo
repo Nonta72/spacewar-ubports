@@ -14,7 +14,7 @@ deviceinfo_system_partition_size="3900M"
 deviceinfo_ramdisk_compression="gzip"
 
 # Download prebuilt ramdisk for the boot image
-deviceinfo_prebuilt_boot_ramdisk_source="https://github.com/Nonta72/nothing-spacewar/raw/refs/heads/dualboot/initrd.img-touch-arm64"
+# deviceinfo_prebuilt_boot_ramdisk_source="https://github.com/Nonta72/nothing-spacewar/raw/refs/heads/dualboot/initrd.img-touch-arm64"
 
 deviceinfo_flash_pagesize="4096"
 deviceinfo_flash_offset_base="0x00000000"
