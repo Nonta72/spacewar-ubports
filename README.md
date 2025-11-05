@@ -7,7 +7,7 @@ You also should boot android **at least once**!!!
 
 1. Download the latest release of Ubuntu Touch
 
-2. Extract the .zip file
+2. Extract the .tar.xz file
 
 3. Reboot your device into fastboot mode
 
