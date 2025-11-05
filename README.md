@@ -13,7 +13,7 @@ You also should boot android **at least once**!!!
 
 4. Unlock the bootloader (if you haven't already)
 
-5. Download and flash the normal boot and vendor_boot images (folder here)[https://github.com/neonmodder123/spacewar-ut-dualboot/tree/ubuntu-dualboot/normal-images] and reboot to recovery using these commands:
+5. Download and flash the normal boot and vendor_boot images (Download from here: https://github.com/neonmodder123/spacewar-ut-dualboot/tree/ubuntu-dualboot/normal-images) and reboot to recovery using these commands:
 ```
 fastboot set_active b
 fastboot flash boot_b boot.img
