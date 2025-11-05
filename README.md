@@ -13,7 +13,7 @@ You also should boot android **at least once**!!!
 
 4. Unlock the bootloader (if you haven't already)
 
-5. Flash the boot and vendor_boot images and reboot to recovery using these commands:
+5. Download and flash the normal boot and vendor_boot images (folder here)[https://github.com/neonmodder123/spacewar-ut-dualboot/tree/ubuntu-dualboot/normal-images] and reboot to recovery using these commands:
 ```
 fastboot set_active b
 fastboot flash boot_b boot.img
@@ -64,13 +64,20 @@ adb shell
 mount /data
 exit
 ```
-13. Push the ubuntu.img rootfs to /data using adb:
+13. Push the ubuntu.img rootfs to /data using adb then reboot to bootloader:
 ```
 adb push <drag ubuntu.img> /data/
+adb reboot bootloader
+```
+14. Flash the modified boot and vendor_boot images in the extracted folder containing the ubuntu.img rootfs using these commands:
+```
+fastboot set_active b
+fastboot flash boot_b <drag boot.img>
+fastboot flash vendor_boot_b <drag vendor_boot.img>
 ```
 14. Reboot!
 
-  You have now successfully dualbooted Android and Ubuntu Touch! Wait 2-4 minutes for the first boot. You should see the Ubuntu Touch bootanimationand see    the setup. Proceed to the next step.
+  You have now successfully dualbooted Android and Ubuntu Touch! Wait 2-4 minutes for the first boot. You should see the Ubuntu Touch bootanimation and then see the setup. Proceed to the next step.
 
 15. Finish the Ubuntu Touch setup and connect to the internet if you did not already.
 16. Open the Open Store and search for an app called "Switch my Slot" and install it.
