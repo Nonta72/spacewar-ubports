@@ -13,7 +13,7 @@ You should also boot android **at least once**!!!
 
 4. Unlock the bootloader (if you haven't already)
 
-5. Download and flash the normal boot and vendor_boot images (Download from here: https://github.com/neonmodder123/spacewar-ut-dualboot/tree/ubuntu-dualboot/normal-images) and reboot to recovery using these commands:
+5. Download and flash the normal boot and vendor_boot images ([download from here](https://github.com/neonmodder123/spacewar-ut-dualboot/tree/ubuntu-dualboot/normal-images)) and reboot to recovery using these commands:
 ```
 fastboot set_active b
 fastboot flash boot_b boot.img
@@ -84,7 +84,7 @@ fastboot flash vendor_boot_b <drag vendor_boot.img>
 17. Now if you want to switch back to android, open the newly installed app and click Switch Slot, and reboot!
 You can also switch slots in android using the app [Boot Control](https://github.com/capntrips/BootControl/releases/tag/v1.0.0-alpha03), but you need to have root installed. If you do not want to root your device, you will manually have to reboot to fastboot mode/bootloader and use fastboot on your PC to switch to Ubuntu Touch.
 
-# _**IMPORTANT NOTE**_: You can NEVER, lock the bootloader in this state. EVER! If you attempt to, you will risk hard-bricking your phone! (Black screen, not turning on at all.) Although this is recoverable with EDL Mode, it is not recommended to lock the bootloader.
+# _**IMPORTANT NOTE**_: You can NEVER, lock the bootloader in this state. EVER! If you attempt to, you will risk hard-bricking your phone! (Black screen, not turning on at all.) Although this is recoverable with EDL Mode, it is not recommended.
 
 # Current status :
 - [x] Boots into UI !
