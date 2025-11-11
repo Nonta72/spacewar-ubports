@@ -35,7 +35,11 @@ cd "$TMPDOWN/$KERNEL_DIR"
 # Generate lahaina_ALLYES_GKI.config from lahaina_GKI.config
 ./scripts/gki/fragment_allyesconfig.sh arch/arm64/configs/vendor/lahaina_GKI.config arch/arm64/configs/vendor/lahaina_ALLYES_GKI.config
 
-# Launch the build script !
+# Switch to workdir
 cd "$HERE"
 
+# Fix the permissions on live
+chmod 644 overlay/system/usr/share/halium-overlay/vendor/etc/init/*.rc
+
+# Launch the build script !
 ./build/build.sh "${args[@]}" -b "$BUILD_DIR"
