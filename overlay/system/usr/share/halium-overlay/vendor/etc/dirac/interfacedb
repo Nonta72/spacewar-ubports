@@ -1,0 +1,39 @@
+<InterfaceDb>
+  <Usecases>
+    <Usecase name="USECASE_INTERNAL_POWERSOUND">
+      <Parameters/>
+      <Modes/>
+    </Usecase>
+    <Usecase name="USECASE_INTERNAL_PANORAMA">
+      <Parameters/>
+      <Modes/>
+    </Usecase>
+    <Usecase name="USECASE_INTERNAL_CUSTOM1">
+      <Parameters/>
+      <Modes/>
+    </Usecase>
+    <Usecase name="USECASE_INTERNAL_CUSTOM2">
+      <Parameters/>
+      <Modes/>
+    </Usecase>
+    <Usecase name="EXT_HEADSET">
+      <Parameters/>
+      <Modes>
+        <Mode name="Movie"/>
+        <Mode name="Music"/>
+      </Modes>
+    </Usecase>
+    <Usecase name="EXT_HEADSET_MOVIE">
+      <Parameters/>
+      <Modes/>
+    </Usecase>
+    <Usecase name="EXT_HEADSET_GAME">
+      <Parameters/>
+      <Modes/>
+    </Usecase>
+    <Usecase name="EXT_HEADSET_NAVIGATE">
+      <Parameters/>
+      <Modes/>
+    </Usecase>
+  </Usecases>
+</InterfaceDb>

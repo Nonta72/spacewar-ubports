@@ -1,0 +1,7 @@
+on property:dev.bootcomplete=1 && property:ro.build.type=user
+  setprop persist.vendor.ssr.restart_level ALL_ENABLE
+  setprop persist.vendor.ssr.enable_ramdumps 1
+
+on property:dev.bootcomplete=1 && property:ro.build.type=userdebug
+  setprop persist.vendor.ssr.restart_level ALL_DISABLE
+  setprop persist.vendor.ssr.enable_ramdumps 0

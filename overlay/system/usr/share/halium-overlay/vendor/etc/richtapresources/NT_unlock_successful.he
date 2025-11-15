@@ -1,0 +1,25 @@
+{
+    "Metadata": {
+        "Version": 2,
+        "Created": "2022-03-30",
+        "Description": "Exported from RichTap Creator Editor InnerTest"
+    },
+    "PatternList": [
+        {
+            "AbsoluteTime": 0,
+            "Pattern": [
+                {
+                    "Event": {
+                        "Type": "transient",
+                        "RelativeTime": 0,
+                        "Parameters": {
+                            "Intensity": 88,
+                            "Frequency": 68
+                        },
+                        "Index": 0
+                    }
+                }
+            ]
+        }
+    ]
+}

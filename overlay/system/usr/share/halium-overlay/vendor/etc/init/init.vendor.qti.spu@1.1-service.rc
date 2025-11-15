@@ -1,0 +1,16 @@
+#####################################################################
+# Copyright (c) 2019-2021 Qualcomm Technologies, Inc.
+# All Rights Reserved.
+# Confidential and Proprietary - Qualcomm Technologies, Inc.
+#####################################################################
+
+on init && property:ro.boot.product.vendor.sku=lahaina
+    start spu_service
+
+on init && property:ro.boot.product.vendor.sku=taro
+    start spu_service
+
+service spu_service /vendor/bin/hw/vendor.qti.spu@1.1-service
+    class hal
+    user system
+    group system

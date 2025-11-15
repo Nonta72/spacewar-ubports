@@ -1,0 +1,145 @@
+{
+    "configs": [
+        {
+          "package": "com.google.android.projection.gearhead.phonescreen",
+          "rate": "60,60,60"
+        },
+        {
+          "package": "com.waze",
+          "rate": "60,60,60"
+        },
+        {
+          "package": "com.google.android.apps.mapslite",
+          "rate": "60,60,60"
+        },
+        {
+          "package": "ru.yandex.yandexmaps",
+          "rate": "60,60,60"
+        },
+        {
+          "package": "maps.pro",
+          "rate": "60,60,60"
+        },
+        {
+          "package": "com.baidu.BaiduMap",
+          "rate": "60,60,60"
+        },
+        {
+          "package": "com.mapquest.android.ace",
+          "rate": "60,60,60"
+        },
+        {
+          "package": "com.autonavi.minimap",
+          "rate": "60,60,60"
+        },
+        {
+          "package": "com.nhn.android.nmap",
+          "rate": "60,60,60"
+        },
+        {
+          "package": "com.here.app.maps",
+          "rate": "60,60,60"
+        },
+        {
+          "package": "com.ss.android.ugc.aweme",
+          "rate": "60,60,60"
+        },
+        {
+          "package": "com.ss.android.ugc.aweme.lite",
+          "rate": "60,60,60"
+        },
+        {
+          "package": "com.ss.android.ugc.trill",
+          "rate": "60,60,60"
+        },
+        {
+          "package": "tv.twitch.android.app",
+          "rate": "60,60,60"
+        },
+        {
+          "package": "com.android.chrome",
+          "rate": "90,120,60",
+          "disableSv": true
+        },
+        {
+          "package": "com.brave.browser",
+          "rate": "90,120,60",
+          "disableSv": true
+        },
+        {
+          "package": "com.opera.browser",
+          "rate": "90,120,60",
+          "disableSv": true
+        },
+        {
+          "package": "org.mozilla.firefox",
+          "rate": "90,120,60",
+          "disableSv": true
+        },
+        {
+          "package": "org.torproject.torbrowser",
+          "rate": "90,120,60",
+          "disableSv": true
+        },
+        {
+          "package": "com.sec.android.app.sbrowser",
+          "rate": "90,120,60",
+          "disableSv": true
+        },
+        {
+          "package": "com.kiwibrowser.browser",
+          "rate": "90,120,60",
+          "disableSv": true
+        },
+        {
+          "package": "com.microsoft.emmx",
+          "rate": "90,120,60",
+          "disableSv": true
+        },
+        {
+          "package": "com.hsv.freeadblockerbrowser",
+          "rate": "90,120,60",
+          "disableSv": true
+        },
+        {
+          "package": "com.vivaldi.browser",
+          "rate": "90,120,60",
+          "disableSv": true
+        },
+        {
+          "package": "com.yandex.browser",
+          "rate": "90,120,60",
+          "disableSv": true
+        },
+        {
+          "package": "org.adblockplus.browser",
+          "rate": "90,120,60",
+          "disableSv": true
+        },
+        {
+          "package": "com.naver.whale",
+          "rate": "90,120,60",
+          "disableSv": true
+        },
+        {
+          "package": "com.nothing.launcher",
+          "rate": "120,120,60",
+          "disableSv": true
+        },
+        {
+          "package": "com.tencent.mm",
+          "rate": "90,120,60",
+          "disableSv": true
+        },
+        {
+          "package": "com.axlebolt.standoff2",
+          "rate": "90,120,60",
+          "disableSv": true
+        },
+        {
+          "package": "com.facebook.orca",
+          "rate": "90,120,60",
+          "disableSv": true
+        }
+    ]
+}

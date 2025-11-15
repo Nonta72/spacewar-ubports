@@ -1,0 +1,1 @@
+mcfg_hw/generic/common/Kodiak/STANDALONE/LA/DSDS_CDMALess/mcfg_hw.mbn

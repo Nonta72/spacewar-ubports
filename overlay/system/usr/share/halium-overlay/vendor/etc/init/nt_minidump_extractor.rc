@@ -1,0 +1,16 @@
+# create /data/vendor/minidump and setup vendor.minidump.cp.status
+on post-fs-data
+  setprop vendor.minidump.cp.status "wait"
+  mkdir /data/vendor/minidump 0771 root system
+  mkdir /data/vendor/minidump/last_kmsg 0771 root system
+  mkdir /data/vendor/minidump/aop_dump 0771 root system
+
+# Moving minidump data after detect boot complete
+on property:dev.bootcomplete=1 && property:vendor.minidump.cp.status="wait"
+  # --file c means to combine minidump and not doing parser
+  start nt_minidump_extractor
+
+service nt_minidump_extractor /vendor/bin/nt_minidump_extractor --output /data/vendor/minidump --file c
+    user root
+    group system
+    oneshot
