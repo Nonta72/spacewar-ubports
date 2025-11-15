@@ -10,7 +10,7 @@ deviceinfo_kernel_clang_compile="true"
 deviceinfo_kernel_llvm_compile="true"
 deviceinfo_halium_version="11"
 deviceinfo_ubuntu_touch_release="24.04-1.x"
-deviceinfo_system_partition_size="3900M"
+deviceinfo_system_partition_size="4900M"
 deviceinfo_ramdisk_compression="gzip"
 
 # Download prebuilt ramdisk for the boot image
