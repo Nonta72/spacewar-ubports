@@ -1,9 +1,0 @@
-on property:sys.boot_completed=1
-    mkdir /data/vendor/zram 0770 root system
-    swapon_all /data/vendor/zram/zramwriteback.fstab
-
-on property:persist.sys.zramwriteback_enable=true && property:persist.sys.zramwriteback_size=*
-    exec - root system -- /vendor/bin/nt_gen_zramwriteback_fstab -b ${persist.sys.zramwriteback_size}
-
-on property:persist.sys.zramwriteback_enable=false
-    exec - root system -- /vendor/bin/nt_gen_zramwriteback_fstab -d
