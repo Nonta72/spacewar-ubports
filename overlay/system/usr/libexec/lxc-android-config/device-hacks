@@ -10,8 +10,7 @@ while [ "$(getprop init.svc.perf-hal-2-2)" != "running" ]; do
     sleep 1
 done
 
-sleep 5
-echo 1 > /proc/sys/kernel/sched_boost
+echo 50 > /sys/fs/cgroup/user.slice/cpu.uclamp.min
 
 echo ON > /dev/wlan
 
