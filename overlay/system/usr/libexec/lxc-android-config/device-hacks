@@ -15,3 +15,15 @@ echo 50 > /sys/fs/cgroup/user.slice/cpu.uclamp.min
 echo ON > /dev/wlan
 
 iw phy0 wowlan enable magic-packet disconnect
+
+# Mount filesystem to register interpreters against the native file format handler
+mount -t binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc
+systemctl restart systemd-binfmt.service
+
+# Stop an endless cycle of restarting and failing 'vendor.camera-provider-2-4',
+# as Waydroid connects to the one on the host-side binder interface
+if [ ! -f /var/lib/waydroid/overlay/vendor/etc/init/camera-provider-hack.rc ]; then
+    mkdir -p /var/lib/waydroid/overlay/vendor/etc/init
+    echo "on property:sys.boot_completed=1" > /var/lib/waydroid/overlay/vendor/etc/init/camera-provider-hack.rc
+    echo "  stop vendor.camera-provider-2-4" >> /var/lib/waydroid/overlay/vendor/etc/init/camera-provider-hack.rc
+fi
