@@ -27,3 +27,17 @@ if [ ! -f /var/lib/waydroid/overlay/vendor/etc/init/camera-provider-hack.rc ]; t
     echo "on property:sys.boot_completed=1" > /var/lib/waydroid/overlay/vendor/etc/init/camera-provider-hack.rc
     echo "  stop vendor.camera-provider-2-4" >> /var/lib/waydroid/overlay/vendor/etc/init/camera-provider-hack.rc
 fi
+
+# Set a wake lock while running Waydroid
+# Opportunistic autosuspend blocks Waydroid and waydroid-sensors
+# from processing events, leading to lockups and unrecoverable restarts
+echo -e '#!/bin/sh\necho waydroid > /sys/power/wake_lock' > /tmp/waydroid-start-hook
+echo -e '#!/bin/sh\necho waydroid > /sys/power/wake_unlock' > /tmp/waydroid-stop-hook
+chmod 755 /tmp/waydroid-start-hook
+chmod 755 /tmp/waydroid-stop-hook
+cat /usr/lib/waydroid/data/configs/config_base > /tmp/waydroid_config_base
+echo "lxc.hook.start-host = /tmp/waydroid-start-hook" >> /tmp/waydroid_config_base
+echo "lxc.hook.stop = /tmp/waydroid-stop-hook" >> /tmp/waydroid_config_base
+mount -o bind /tmp/waydroid_config_base /usr/lib/waydroid/data/configs/config_base
+
+exit 0
