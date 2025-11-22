@@ -80,7 +80,7 @@ chmod 664 /mnt/ut/etc/usb-moded/dyn-modes/mtp_adb.ini.in
 chmod 664 /mnt/ut/etc/usb-moded/dyn-modes/mtp.ini.in
 chmod 664 /mnt/ut/etc/usb-moded/90-device-specific-config.ini
 chmod 664 /mnt/ut/etc/umtprd/umtprd.conf
-chmod 644 /usr/lib/systemd/system/umtprd.service
+chmod 644 /mnt/ut/usr/lib/systemd/system/umtprd.service
 chmod 664 /mnt/ut/etc/ofono/binder.d/qti.conf
 chmod 664 /mnt/ut/etc/ofono/ril_subscription.conf
 chmod 664 /mnt/ut/etc/deviceinfo/devices/halium.yaml
