@@ -32,8 +32,8 @@ umount /mnt/system/userdata
 umount /mnt/system
 
 # Flash the kernel
-dd if=/data/patch/boot.img of=/dev/disk/by-partlabel/boot_a
-dd if=/data/patch/vendor_boot.img of=/dev/disk/by-partlabel/vendor_boot_a
+dd if=/data/patch/boot.img of=/dev/block/by-name/boot_a status=progress
+dd if=/data/patch/vendor_boot.img of=/dev/block/by-name/vendor_boot_a status=progress
 
 # Final cleanup
 umount /data
