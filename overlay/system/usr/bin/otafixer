@@ -1,0 +1,114 @@
+#!/bin/bash
+
+#Mount RW
+mount -o remount,rw /
+
+#Setup Directories
+mkdir -p /usr/share/halium-overlay/vendor/etc/audio/
+mkdir -p /usr/share/halium-overlay/vendor/lib/hw/
+mkdir -p /usr/share/halium-overlay/vendor/lib/soundfx/
+mkdir -p /usr/share/halium-overlay/vendor/lib64/soundfx/
+mkdir -p /etc/systemd/system/lightdm.service.d
+mkdir -p /etc/systemd/system/repowerd.service.d
+mkdir -p /etc/systemd/system/sockets.target.wants
+mkdir -p /etc/systemd/system/ssh.service.requires
+
+#Copy kernel modules
+rm -rf /usr/lib/modules/5.4.*
+cp -R /userdata/patch/usr/lib/modules/5.4.289-qgki-gcfce8884187a /usr/lib/modules/
+depmod -a
+
+#Install overlay files
+cp -f /userdata/patch/etc/apparmor.d/tunables/alias.d/rootfs-overlay /etc/apparmor.d/tunables/alias.d/rootfs-overlay
+cp -f /userdata/patch/etc/default/usb-moded.d/device-specific-config.conf /etc/default/usb-moded.d/device-specific-config.conf
+cp -f /userdata/patch/etc/deviceinfo/devices/halium.yaml /etc/deviceinfo/devices/halium.yaml
+cp -f /userdata/patch/etc/ofono/ril_subscription.conf /etc/ofono/ril_subscription.conf
+cp -f /userdata/patch/etc/ofono/binder.d/qti.conf /etc/ofono/binder.d/qti.conf
+cp -f /userdata/patch/etc/sysctl.d/98-Spacewar.conf /etc/sysctl.d/98-Spacewar.conf
+cp -f /userdata/patch/usr/lib/systemd/system/umtprd.service /usr/lib/systemd/system/umtprd.service
+cp -f /userdata/patch/etc/systemd/system/lightdm.service.d/override.conf /etc/systemd/system/lightdm.service.d/override.conf
+cp -f /userdata/patch/etc/systemd/system/repowerd.service.d/override.conf /etc/systemd/system/repowerd.service.d/override.conf
+cp -f /userdata/patch/etc/umtprd/umtprd.conf /etc/umtprd/umtprd.conf
+cp -f /userdata/patch/etc/usb-moded/90-device-specific-config.ini /etc/usb-moded/90-device-specific-config.ini
+cp -f /userdata/patch/etc/usb-moded/dyn-modes/mtp.ini.in /etc/usb-moded/dyn-modes/mtp.ini.in
+cp -f /userdata/patch/etc/usb-moded/dyn-modes/mtp_adb.ini.in /etc/usb-moded/dyn-modes/mtp_adb.ini.in
+cp -f /userdata/patch/etc/usb-moded/run/mtp-umtprd.ini /etc/usb-moded/run/mtp-umtprd.ini
+cp -f /userdata/patch/etc/usb-moded/run/mtp-umtprd.ini /etc/usb-moded/run/mtp-umtprd.ini
+cp -f /userdata/patch/etc/fscrypt.conf /etc/fscrypt.conf
+cp -f /userdata/patch/etc/gbinder.conf /etc/gbinder.conf
+cp -f /userdata/patch/usr/bin/umtprd /usr/bin/umtprd
+cp -f /userdata/patch/usr/bin/usb-tethering /usr/bin/usb-tethering
+cp -f /userdata/patch/usr/lib/modules-load.d/Spacewar.conf /usr/lib/modules-load.d/Spacewar.conf
+cp -f /userdata/patch/usr/lib/systemd/system/hfd-service.service.d/wait-for-service.conf /usr/lib/systemd/system/hfd-service.service.d/wait-for-service.conf
+cp -f /userdata/patch/usr/lib/udev/rules.d/70-Spacewar.rules /usr/lib/udev/rules.d/70-Spacewar.rules
+cp -f /userdata/patch/usr/libexec/lxc-android-config/device-hacks /usr/libexec/lxc-android-config/device-hacks
+cp -f /userdata/patch/usr/libexec/usb-moded/umtprd-functionfs.sh /usr/libexec/usb-moded/umtprd-functionfs.sh
+cp -f /userdata/patch/usr/libexec/hfd-service /usr/libexec/hfd-service
+cp -f /userdata/patch/usr/libexec/umtprd-manager /usr/libexec/umtprd-manager
+cp -f /userdata/patch/usr/share/repowerd/device-configs/config-default.xml /usr/share/repowerd/device-configs/config-default.xml
+cp -f /userdata/patch/usr/share/halium-overlay/odm/ueventd.rc /usr/share/halium-overlay/odm/ueventd.rc
+#cp -f /userdata/patch/usr/share/halium-overlay/vendor/etc/init/vndservicemanager.rc /usr/share/halium-overlay/vendor/bin/vndservicemanager
+cp -f /userdata/patch/usr/share/halium-overlay/system/etc/prop.halium /usr/share/halium-overlay/system/etc/prop.halium
+cp -f /userdata/patch/usr/share/halium-overlay/vendor/etc/init/android.hardware.biometrics.fingerprint@2.1-service.rc /usr/share/halium-overlay/vendor/etc/init/android.hardware.biometrics.fingerprint@2.1-service.rc
+cp -f /userdata/patch/usr/share/halium-overlay/vendor/etc/init/hw/init.qcom.usb.rc /usr/share/halium-overlay/vendor/etc/init/hw/init.qcom.usb.rc
+cp -f /userdata/patch/usr/share/halium-overlay/vendor/etc/perf/commonresourceconfigs.xml /usr/share/halium-overlay/vendor/etc/perf/commonresourceconfigs.xml
+
+#Fix permissions
+chmod 664 /usr/share/halium-overlay/vendor/etc/perf/commonresourceconfigs.xml
+chmod 664 /usr/share/halium-overlay/vendor/etc/init/hw/init.qcom.usb.rc
+chmod 664 /usr/share/halium-overlay/vendor/etc/init/android.hardware.biometrics.fingerprint@2.1-service.rc
+chmod 664 /usr/share/halium-overlay/system/etc/prop.halium
+chmod 755 /usr/share/halium-overlay/vendor/bin/vndservicemanager
+chmod 664 /usr/share/halium-overlay/odm/ueventd.rc
+chmod 664 /usr/share/repowerd/device-configs/config-default.xml
+chmod 755 /usr/libexec/umtprd-manager
+chmod 755 /usr/libexec/hfd-service
+chmod 755 /usr/libexec/usb-moded/umtprd-functionfs.sh
+chmod 755 /usr/libexec/lxc-android-config/device-hacks
+chmod 664 /usr/lib/udev/rules.d/70-Spacewar.rules
+chmod 664 /usr/lib/systemd/system/hfd-service.service.d/wait-for-service.conf
+chmod 664 /usr/lib/modules-load.d/Spacewar.conf
+chmod 755 /usr/bin/usb-tethering
+chmod 755 /usr/bin/umtprd
+chmod 664 /etc/gbinder.conf
+chmod 664 /etc/fscrypt.conf
+chmod 664 /etc/usb-moded/run/mtp-umtprd.ini
+chmod 664 /etc/usb-moded/run/mtp-umtprd.ini
+chmod 664 /etc/usb-moded/dyn-modes/mtp_adb.ini.in
+chmod 664 /etc/usb-moded/dyn-modes/mtp.ini.in
+chmod 664 /etc/usb-moded/90-device-specific-config.ini
+chmod 664 /etc/umtprd/umtprd.conf
+chmod 644 /usr/lib/systemd/system/umtprd.service
+chmod 664 /etc/ofono/binder.d/qti.conf
+chmod 664 /etc/ofono/ril_subscription.conf
+chmod 664 /etc/deviceinfo/devices/halium.yaml
+chmod 664 /etc/default/usb-moded.d/device-specific-config.conf
+chmod 664 /etc/apparmor.d/tunables/alias.d/rootfs-overlay
+chmod 644 /etc/systemd/system/lightdm.service.d/override.conf
+chmod 644 /etc/systemd/system/repowerd.service.d/override.conf
+
+#Create appropriate symlinks
+#rm /etc/systemd/user/graphical-session.target.wants/umtprd-manager.service
+ln -sf /vendor/etc/audio/sku_lahaina_qssi/audio_policy_configuration.xml /usr/share/halium-overlay/vendor/etc/audio/audio_policy_configuration.xml
+ln -sf /vendor/etc/audio/sku_lahaina/audio_effects.xml /usr/share/halium-overlay/vendor/etc/audio_effects.xml
+ln -sf /vendor/etc/audio/sku_lahaina/audio_io_policy.conf /usr/share/halium-overlay/vendor/etc/audio_io_policy.conf
+ln -sf /vendor/etc/audio/sku_lahaina/audio_platform_info_intcodec.xml /usr/share/halium-overlay/vendor/etc/audio_platform_info_intcodec.xml
+ln -sf /vendor/etc/audio/sku_lahaina_qssi/audio_policy_configuration.xml /usr/share/halium-overlay/vendor/etc/audio_policy_configuration.xml
+ln -sf /vendor/etc/audio/sku_lahaina/audio_tuning_mixer.txt /usr/share/halium-overlay/vendor/etc/audio_tuning_mixer.txt
+ln -sf /vendor/etc/audio/sku_lahaina/mixer_paths.xml /usr/share/halium-overlay/vendor/etc/mixer_paths.xml
+ln -sf /vendor/etc/audio/sku_lahaina/sound_trigger_mixer_paths.xml /usr/share/halium-overlay/vendor/etc/sound_trigger_mixer_paths.xml
+ln -sf /vendor/etc/audio/sku_lahaina/sound_trigger_platform_info.xml /usr/share/halium-overlay/vendor/etc/sound_trigger_platform_info.xml
+ln -sf /android/vendor/lib64/hw/sound_trigger.primary.lahaina.so /usr/share/halium-overlay/vendor/lib/hw/sound_trigger.primary.lahaina.so
+ln -sf /android/vendor/lib64/soundfx/libqcompostprocbundle.so /usr/share/halium-overlay/vendor/lib/soundfx/libqcompostprocbundle.so
+ln -sf /android/vendor/lib64/soundfx/libqcomvisualizer.so /usr/share/halium-overlay/vendor/lib/soundfx/libqcomvisualizer.so
+ln -sf /android/vendor/lib/libadm.so /usr/share/halium-overlay/vendor/lib/libadm.so
+ln -sf /android/vendor/lib64/libqtigef.so /usr/share/halium-overlay/vendor/lib/libqtigef.so
+ln -sf /android/vendor/lib64/hw/sound_trigger.primary.lahaina.so /usr/share/halium-overlay/vendor/lib64/sound_trigger.primary.lahaina.so
+ln -sf /dev/null /usr/share/halium-overlay/vendor/lib64/hw/gralloc.common.so
+ln -sf /dev/null /usr/share/halium-overlay/vendor/lib64/hw/gralloc.default.so
+ln -sf /android/vendor/lib64/libqcompostprocbundle.so /usr/share/halium-overlay/vendor/lib64/soundfx/libqcompostprocbundle.so
+ln -sf /usr/lib/systemd/user/umtprd-manager.service /etc/systemd/user/graphical-session.target.wants/umtprd-manager.service
+ln -sf /dev/null /etc/systemd/system/serial-getty@hvc0.service
+ln -sf /dev/null /etc/systemd/user/mtp-server-usb-moded-watcher.service
+ln -sf /usr/lib/systemd/system/ssh.socket /etc/systemd/system/sockets.target.wants/ssh.socket
+ln -sf /usr/lib/systemd/system/ssh.socket /etc/systemd/system/ssh.service.requires/ssh.socket
