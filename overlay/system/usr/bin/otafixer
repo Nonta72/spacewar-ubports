@@ -123,8 +123,8 @@ else
     echo "[INFO] /dev/block/by-name not found — flashing via /dev/disk/by-partlabel."
 
     # Flash boot image
-    dd if=/userdata/patch/boot.img of=/dev/disk/by-partlabel/boot_a status=progress
+    dd if=/userdata/patch/boot.img of=/dev/disk/by-partlabel/boot_b status=progress
 
     # Flash vendor_boot image
-    dd if=/userdata/patch/vendor_boot.img of=/dev/disk/by-partlabel/vendor_boot_a status=progress
+    dd if=/userdata/patch/vendor_boot.img of=/dev/disk/by-partlabel/vendor_boot_b status=progress
 fi
