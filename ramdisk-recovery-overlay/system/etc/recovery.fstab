@@ -33,7 +33,7 @@
 # system                                                /system                ext4    ro,barrier=1                                         wait,slotselect,avb=vbmeta_system,logical,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey
 
 # Install UT to the custom partition (on /dev/sda12)
-/dev/block/bootdevice/by-name/rootfs                    /system_root           ext4    ro,barrier=1                                         wait,check
+/dev/block/bootdevice/by-name/rootfs                    /system                ext4    ro,barrier=1                                         wait,check
 
 system_ext                                              /system_ext            ext4    ro,barrier=1                                         wait,slotselect,avb=vbmeta_system,logical
 product                                                 /product               ext4    ro,barrier=1,discard                                 wait,slotselect,avb=vbmeta_system,logical
