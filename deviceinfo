@@ -1,3 +1,33 @@
-This is testing branch!
-Switch to halium-11.0 branch for the stable version
-Only use this branch if you know what's going on here
+deviceinfo_name="Nothing Phone (1)"
+deviceinfo_manufacturer="Nothing"
+deviceinfo_codename="Spacewar"
+deviceinfo_arch="aarch64"
+deviceinfo_kernel_source="https://github.com/Nonta72/android_kernel_nothing_sm7325.git"
+deviceinfo_kernel_source_branch="halium-11.0-rebase"
+deviceinfo_kernel_defconfig="gki_defconfig vendor/lahaina_ALLYES_GKI.config vendor/lahaina_QGKI.config vendor/debugfs.config vendor/halium.config"
+deviceinfo_kernel_cmdline="androidboot.hardware=qcom androidboot.memcg=1 lpm_levels.sleep_disabled=1 service_locator.enable=1 androidboot.usbcontroller=a600000.dwc3 swiotlb=0 loop.max_part=7 cgroup.memory=nokmem,nosocket pcie_ports=compat iptable_raw.raw_before_defrag=1 ip6table_raw.raw_before_defrag=1 systempart=/dev/disk/by-partlabel/rootfs console=tty0"
+deviceinfo_kernel_clang_compile="true"
+deviceinfo_kernel_llvm_compile="true"
+deviceinfo_halium_version="11"
+deviceinfo_ubuntu_touch_release="24.04-1.x"
+deviceinfo_system_partition_size="3900M"
+deviceinfo_ramdisk_compression="gzip"
+
+# Download prebuilt ramdisk for the boot image
+# deviceinfo_prebuilt_boot_ramdisk_source="https://github.com/Nonta72/nothing-spacewar/raw/refs/heads/dualboot/initrd.img-touch-arm64"
+
+deviceinfo_flash_pagesize="4096"
+deviceinfo_flash_offset_base="0x00000000"
+deviceinfo_flash_offset_kernel="0x00008000"
+deviceinfo_flash_offset_ramdisk="0x01000000"
+deviceinfo_flash_offset_second="0x00000000"
+deviceinfo_flash_offset_tags="0x00000100"
+deviceinfo_flash_offset_dtb="0x01f00000"
+deviceinfo_bootimg_qcdt="false"
+deviceinfo_bootimg_header_version="3"
+deviceinfo_bootimg_os_version="11"
+deviceinfo_bootimg_os_patch_level="2022-11"
+deviceinfo_bootimg_prebuilt_dtb="nothing-spacewar.dtb"
+deviceinfo_bootimg_partition_size="100663296"
+# deviceinfo_prebuilt_dtbo="dtbo.img"
+deviceinfo_rootfs_image_sector_size="4096"
