@@ -1,125 +1,40 @@
-#!/system/bin/sh
+#!/system/bin/bash
 
-#Mount
+# Mount and required partitions first
 mount /data
+mount /mnt/system
 
-#Setup Directories
-mkdir -p /mnt/system/usr/share/halium-overlay/vendor/etc/audio/
-mkdir -p /mnt/system/usr/share/halium-overlay/vendor/lib/hw/
-mkdir -p /mnt/system/usr/share/halium-overlay/vendor/lib/soundfx/
-mkdir -p /mnt/system/usr/share/halium-overlay/vendor/lib64/soundfx/
-mkdir -p /mnt/system/etc/systemd/system/lightdm.service.d
-mkdir -p /mnt/system/etc/systemd/system/repowerd.service.d
-mkdir -p /mnt/system/etc/systemd/system/sockets.target.wants
-mkdir -p /mnt/system/etc/systemd/system/ssh.service.requires
+# Create bind mounts for chroot
+mount --bind /dev /mnt/system/dev
+mount --bind /proc /mnt/system/proc
+mount --bind /sys /mnt/system/sys
+mount --bind /dev/pts /mnt/system/dev/pts
+mount --bind /data /mnt/system/userdata
 
-#Copy kernel modules
-rm -rf /mnt/system/usr/lib/modules/5.4.*
-cp -R /data/patch/usr/lib/modules/5.4.289-qgki-gcfce8884187a /mnt/system/usr/lib/modules/
-#depmod -a
+# Enter chroot and log it
+chroot /mnt/system /bin/bash -x << 'EOF'
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
 
-#Install overlay files
-cp -f /data/patch/etc/apparmor.d/tunables/alias.d/rootfs-overlay /mnt/system/etc/apparmor.d/tunables/alias.d/rootfs-overlay
-cp -f /data/patch/etc/default/usb-moded.d/device-specific-config.conf /mnt/system/etc/default/usb-moded.d/device-specific-config.conf
-cp -f /data/patch/etc/deviceinfo/devices/halium.yaml /mnt/system/etc/deviceinfo/devices/halium.yaml
-cp -f /data/patch/etc/ofono/ril_subscription.conf /mnt/system/etc/ofono/ril_subscription.conf
-cp -f /data/patch/etc/ofono/binder.d/qti.conf /mnt/system/etc/ofono/binder.d/qti.conf
-cp -f /data/patch/etc/sysctl.d/98-Spacewar.conf /mnt/system/etc/sysctl.d/98-Spacewar.conf
-cp -f /data/patch/usr/lib/systemd/system/umtprd.service /mnt/system/usr/lib/systemd/system/umtprd.service
-cp -f /data/patch/etc/systemd/system/lightdm.service.d/override.conf /mnt/system/etc/systemd/system/lightdm.service.d/override.conf
-cp -f /data/patch/etc/systemd/system/repowerd.service.d/override.conf /mnt/system/etc/systemd/system/repowerd.service.d/override.conf
-cp -f /data/patch/etc/umtprd/umtprd.conf /mnt/system/etc/umtprd/umtprd.conf
-cp -f /data/patch/etc/usb-moded/90-device-specific-config.ini /mnt/system/etc/usb-moded/90-device-specific-config.ini
-cp -f /data/patch/etc/usb-moded/dyn-modes/mtp.ini.in /mnt/system/etc/usb-moded/dyn-modes/mtp.ini.in
-cp -f /data/patch/etc/usb-moded/dyn-modes/mtp_adb.ini.in /mnt/system/etc/usb-moded/dyn-modes/mtp_adb.ini.in
-cp -f /data/patch/etc/usb-moded/run/mtp-umtprd.ini /mnt/system/etc/usb-moded/run/mtp-umtprd.ini
-cp -f /data/patch/etc/usb-moded/run/mtp-umtprd.ini /mnt/system/etc/usb-moded/run/mtp-umtprd.ini
-cp -f /data/patch/etc/fscrypt.conf /mnt/system/etc/fscrypt.conf
-cp -f /data/patch/etc/gbinder.conf /mnt/system/etc/gbinder.conf
-cp -f /data/patch/usr/bin/umtprd /mnt/system/usr/bin/umtprd
-cp -f /data/patch/usr/bin/usb-tethering /mnt/system/usr/bin/usb-tethering
-cp -f /data/patch/usr/lib/modules-load.d/Spacewar.conf /mnt/system/usr/lib/modules-load.d/Spacewar.conf
-cp -f /data/patch/usr/lib/systemd/system/hfd-service.service.d/wait-for-service.conf /mnt/system/usr/lib/systemd/system/hfd-service.service.d/wait-for-service.conf
-cp -f /data/patch/usr/lib/udev/rules.d/70-Spacewar.rules /mnt/system/usr/lib/udev/rules.d/70-Spacewar.rules
-cp -f /data/patch/usr/libexec/lxc-android-config/device-hacks /mnt/system/usr/libexec/lxc-android-config/device-hacks
-cp -f /data/patch/usr/libexec/usb-moded/umtprd-functionfs.sh /mnt/system/usr/libexec/usb-moded/umtprd-functionfs.sh
-cp -f /data/patch/usr/libexec/hfd-service /mnt/system/usr/libexec/hfd-service
-cp -f /data/patch/usr/libexec/umtprd-manager /mnt/system/usr/libexec/umtprd-manager
-cp -f /data/patch/usr/share/repowerd/device-configs/config-default.xml /mnt/system/usr/share/repowerd/device-configs/config-default.xml
-cp -f /data/patch/usr/share/halium-overlay/odm/ueventd.rc /mnt/system/usr/share/halium-overlay/odm/ueventd.rc
-#cp -f /data/patch/usr/share/halium-overlay/vendor/etc/init/vndservicemanager.rc /usr/share/halium-overlay/vendor/bin/vndservicemanager
-cp -f /data/patch/usr/share/halium-overlay/system/etc/prop.halium /mnt/system/usr/share/halium-overlay/system/etc/prop.halium
-cp -f /data/patch/usr/share/halium-overlay/vendor/etc/init/android.hardware.biometrics.fingerprint@2.1-service.rc /mnt/system/usr/share/halium-overlay/vendor/etc/init/android.hardware.biometrics.fingerprint@2.1-service.rc
-cp -f /data/patch/usr/share/halium-overlay/vendor/etc/init/hw/init.qcom.usb.rc /mnt/system/usr/share/halium-overlay/vendor/etc/init/hw/init.qcom.usb.rc
-cp -f /data/patch/usr/share/halium-overlay/vendor/etc/perf/commonresourceconfigs.xml /mnt/system/usr/share/halium-overlay/vendor/etc/perf/commonresourceconfigs.xml
+# Remount rootfs RW
+mount -o remount,rw /
 
-#Fix permissions
-chmod 664 /mnt/system/usr/share/halium-overlay/vendor/etc/perf/commonresourceconfigs.xml
-chmod 664 /mnt/system/usr/share/halium-overlay/vendor/etc/init/hw/init.qcom.usb.rc
-chmod 664 /mnt/system/usr/share/halium-overlay/vendor/etc/init/android.hardware.biometrics.fingerprint@2.1-service.rc
-chmod 664 /mnt/system/usr/share/halium-overlay/system/etc/prop.halium
-chmod 755 /mnt/system/usr/share/halium-overlay/vendor/bin/vndservicemanager
-chmod 664 /mnt/system/usr/share/halium-overlay/odm/ueventd.rc
-chmod 664 /mnt/system/usr/share/repowerd/device-configs/config-default.xml
-chmod 755 /mnt/system/usr/libexec/umtprd-manager
-chmod 755 /mnt/system/usr/libexec/hfd-service
-chmod 755 /mnt/system/usr/libexec/usb-moded/umtprd-functionfs.sh
-chmod 755 /mnt/system/usr/libexec/lxc-android-config/device-hacks
-chmod 664 /mnt/system/usr/lib/udev/rules.d/70-Spacewar.rules
-chmod 664 /mnt/system/usr/lib/systemd/system/hfd-service.service.d/wait-for-service.conf
-chmod 664 /mnt/system/usr/lib/modules-load.d/Spacewar.conf
-chmod 755 /mnt/system/usr/bin/usb-tethering
-chmod 755 /mnt/system/usr/bin/umtprd
-chmod 664 /mnt/system/etc/gbinder.conf
-chmod 664 /mnt/system/etc/fscrypt.conf
-chmod 664 /mnt/system/etc/usb-moded/run/mtp-umtprd.ini
-chmod 664 /mnt/system/etc/usb-moded/run/mtp-umtprd.ini
-chmod 664 /mnt/system/etc/usb-moded/dyn-modes/mtp_adb.ini.in
-chmod 664 /mnt/system/etc/usb-moded/dyn-modes/mtp.ini.in
-chmod 664 /mnt/system/etc/usb-moded/90-device-specific-config.ini
-chmod 664 /mnt/system/etc/umtprd/umtprd.conf
-chmod 644 /mnt/system/usr/lib/systemd/system/umtprd.service
-chmod 664 /mnt/system/etc/ofono/binder.d/qti.conf
-chmod 664 /mnt/system/etc/ofono/ril_subscription.conf
-chmod 664 /mnt/system/etc/deviceinfo/devices/halium.yaml
-chmod 664 /mnt/system/etc/default/usb-moded.d/device-specific-config.conf
-chmod 664 /mnt/system/etc/apparmor.d/tunables/alias.d/rootfs-overlay
-chmod 644 /mnt/system/etc/systemd/system/lightdm.service.d/override.conf
-chmod 644 /mnt/system/etc/systemd/system/repowerd.service.d/override.conf
+# Run the otafixer
+otafixer
 
-#Create appropriate symlinks
-#rm /etc/systemd/user/graphical-session.target.wants/umtprd-manager.service
-ln -sf /vendor/etc/audio/sku_lahaina_qssi/audio_policy_configuration.xml /mnt/system/usr/share/halium-overlay/vendor/etc/audio/audio_policy_configuration.xml
-ln -sf /vendor/etc/audio/sku_lahaina/audio_effects.xml /mnt/system/usr/share/halium-overlay/vendor/etc/audio_effects.xml
-ln -sf /vendor/etc/audio/sku_lahaina/audio_io_policy.conf /mnt/system/usr/share/halium-overlay/vendor/etc/audio_io_policy.conf
-ln -sf /vendor/etc/audio/sku_lahaina/audio_platform_info_intcodec.xml /mnt/system/usr/share/halium-overlay/vendor/etc/audio_platform_info_intcodec.xml
-ln -sf /vendor/etc/audio/sku_lahaina_qssi/audio_policy_configuration.xml /mnt/system/usr/share/halium-overlay/vendor/etc/audio_policy_configuration.xml
-ln -sf /vendor/etc/audio/sku_lahaina/audio_tuning_mixer.txt /mnt/system/usr/share/halium-overlay/vendor/etc/audio_tuning_mixer.txt
-ln -sf /vendor/etc/audio/sku_lahaina/mixer_paths.xml /mnt/system/usr/share/halium-overlay/vendor/etc/mixer_paths.xml
-ln -sf /vendor/etc/audio/sku_lahaina/sound_trigger_mixer_paths.xml /mnt/system/usr/share/halium-overlay/vendor/etc/sound_trigger_mixer_paths.xml
-ln -sf /vendor/etc/audio/sku_lahaina/sound_trigger_platform_info.xml /mnt/system/usr/share/halium-overlay/vendor/etc/sound_trigger_platform_info.xml
-ln -sf /android/vendor/lib64/hw/sound_trigger.primary.lahaina.so /mnt/system/usr/share/halium-overlay/vendor/lib/hw/sound_trigger.primary.lahaina.so
-ln -sf /android/vendor/lib64/soundfx/libqcompostprocbundle.so /mnt/system/usr/share/halium-overlay/vendor/lib/soundfx/libqcompostprocbundle.so
-ln -sf /android/vendor/lib64/soundfx/libqcomvisualizer.so /mnt/system/usr/share/halium-overlay/vendor/lib/soundfx/libqcomvisualizer.so
-ln -sf /android/vendor/lib/libadm.so /mnt/system/usr/share/halium-overlay/vendor/lib/libadm.so
-ln -sf /android/vendor/lib64/libqtigef.so /mnt/system/usr/share/halium-overlay/vendor/lib/libqtigef.so
-ln -sf /android/vendor/lib64/hw/sound_trigger.primary.lahaina.so /mnt/system/usr/share/halium-overlay/vendor/lib64/sound_trigger.primary.lahaina.so
-ln -sf /dev/null /mnt/system/usr/share/halium-overlay/vendor/lib64/hw/gralloc.common.so
-ln -sf /dev/null /mnt/system/usr/share/halium-overlay/vendor/lib64/hw/gralloc.default.so
-ln -sf /android/vendor/lib64/libqcompostprocbundle.so /mnt/system/usr/share/halium-overlay/vendor/lib64/soundfx/libqcompostprocbundle.so
-ln -sf /usr/lib/systemd/user/umtprd-manager.service /mnt/system/etc/systemd/user/graphical-session.target.wants/umtprd-manager.service
-ln -sf /dev/null /mnt/system/etc/systemd/system/serial-getty@hvc0.service
-ln -sf /dev/null /mnt/system/etc/systemd/user/mtp-server-usb-moded-watcher.service
-ln -sf /usr/lib/systemd/system/ssh.socket /mnt/system/etc/systemd/system/sockets.target.wants/ssh.socket
-ln -sf /usr/lib/systemd/system/ssh.socket /mnt/system/etc/systemd/system/ssh.service.requires/ssh.socket
+EOF
+
+# Now that chroot has exited, we can unmount
+umount /mnt/system/dev/pts
+umount /mnt/system/dev
+umount /mnt/system/proc
+umount /mnt/system/sys
+umount /mnt/system/userdata
+umount /mnt/system
 
 # Flash the kernel
-dd if=/data/patch/boot.img of=/dev/block/by-name/boot_b
-dd if=/data/patch/vendor_boot.img of=/dev/block/by-name/vendor_boot_b
+dd if=/data/patch/boot.img of=/dev/disk/by-partlabel/boot_a
+dd if=/data/patch/vendor_boot.img of=/dev/disk/by-partlabel/vendor_boot_a
 
-# Cleanup
-#rm /mnt/system/usr/lib/udev/rules.d/70-fp5.rules
-
-# Unmount now
-#umount /mnt/ut
-#umount /data
+# Final cleanup
+umount /data
+reboot
