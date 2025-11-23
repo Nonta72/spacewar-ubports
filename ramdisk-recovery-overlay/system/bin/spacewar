@@ -1,4 +1,4 @@
-#!/system/bin/bash
+#!/system/bin/sh
 
 # Mount and required partitions first
 mount /data
