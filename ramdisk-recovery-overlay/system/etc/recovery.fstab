@@ -30,14 +30,18 @@
 # specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
 
 #<src>                                                 <mnt_point>            <type>  <mnt_flags and options>                            <fs_mgr_flags>
-system                                                  /system                ext4    ro,barrier=1                                         wait,slotselect,avb=vbmeta_system,logical,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey
+# system                                                /system                ext4    ro,barrier=1                                         wait,slotselect,avb=vbmeta_system,logical,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey
+
+# Install UT to the custom partition (on /dev/sda12)
+/dev/block/bootdevice/by-name/rootfs                    /system_root           ext4    ro,barrier=1                                         wait,check
+
 system_ext                                              /system_ext            ext4    ro,barrier=1                                         wait,slotselect,avb=vbmeta_system,logical
 product                                                 /product               ext4    ro,barrier=1,discard                                 wait,slotselect,avb=vbmeta_system,logical
 vendor                                                  /vendor                ext4    ro,barrier=1,discard                                 wait,slotselect,avb,logical
 odm                                                     /odm                   ext4    ro,barrier=1,discard                                 wait,slotselect,avb,logical
 /dev/block/by-name/metadata                             /metadata              ext4    noatime,nosuid,nodev,discard                         wait,check,formattable
 # Add fs_mgr flag - sysfs_path=/sys/devices/platform/soc/xxxx.[ufshc|sdhci] to userdata entry, based on UFS|eMMC device.
-/dev/block/bootdevice/by-name/linux                  /data                  ext4    noatime,nosuid,nodev,discard                         latemount,wait,check,formattable,quota,reservedsize=128M,fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized+wrappedkey_v0,metadata_encryption=aes-256-xts:wrappedkey_v0,keydirectory=/metadata/vold/metadata_encryption,checkpoint=fs
+/dev/block/bootdevice/by-name/linux                     /data                  ext4    noatime,nosuid,nodev,discard                         latemount,wait,check,formattable,quota,reservedsize=128M,fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized+wrappedkey_v0,metadata_encryption=aes-256-xts:wrappedkey_v0,keydirectory=/metadata/vold/metadata_encryption,checkpoint=fs
 /dev/block/bootdevice/by-name/persist                   /mnt/vendor/persist    ext4    noatime,nosuid,nodev,barrier=1                       wait
 /dev/block/bootdevice/by-name/misc                      /misc                  emmc    defaults                                             defaults
 /devices/platform/soc/8804000.sdhci/mmc_host*           /storage/sdcard1       vfat    nosuid,nodev                                         wait,voldmanaged=sdcard1:auto,encryptable=footer
@@ -48,4 +52,3 @@ odm                                                     /odm                   e
 /dev/block/bootdevice/by-name/bluetooth                 /vendor/bt_firmware    vfat    ro,shortname=lower,uid=1002,gid=3002,dmask=227,fmask=337,context=u:object_r:bt_firmware_file:s0 wait,slotselect
 /dev/block/bootdevice/by-name/dtbo                      /dtbo                  ext4    ro,nosuid,nodev,barrier=1                            wait,slotselect,avb
 /dev/block/bootdevice/by-name/boot                      /boot                  ext4    ro,nosuid,nodev,barrier=1                            wait,slotselect,avb
-
