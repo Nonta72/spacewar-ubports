@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Mount RW
+# Mount RW
 mount -o remount,rw /
 
 #Setup Directories
@@ -13,12 +13,12 @@ mkdir -p /etc/systemd/system/repowerd.service.d
 mkdir -p /etc/systemd/system/sockets.target.wants
 mkdir -p /etc/systemd/system/ssh.service.requires
 
-#Copy kernel modules
+# Copy kernel modules
 rm -rf /usr/lib/modules/5.4.*
 cp -R /userdata/patch/usr/lib/modules/5.4.289-qgki-gcfce8884187a /usr/lib/modules/
 depmod -a
 
-#Install overlay files
+# Install overlay files
 cp -f /userdata/patch/etc/apparmor.d/tunables/alias.d/rootfs-overlay /etc/apparmor.d/tunables/alias.d/rootfs-overlay
 cp -f /userdata/patch/etc/default/usb-moded.d/device-specific-config.conf /etc/default/usb-moded.d/device-specific-config.conf
 cp -f /userdata/patch/etc/deviceinfo/devices/halium.yaml /etc/deviceinfo/devices/halium.yaml
@@ -53,7 +53,7 @@ cp -f /userdata/patch/usr/share/halium-overlay/vendor/etc/init/android.hardware.
 cp -f /userdata/patch/usr/share/halium-overlay/vendor/etc/init/hw/init.qcom.usb.rc /usr/share/halium-overlay/vendor/etc/init/hw/init.qcom.usb.rc
 cp -f /userdata/patch/usr/share/halium-overlay/vendor/etc/perf/commonresourceconfigs.xml /usr/share/halium-overlay/vendor/etc/perf/commonresourceconfigs.xml
 
-#Fix permissions
+# Fix permissions
 chmod 664 /usr/share/halium-overlay/vendor/etc/perf/commonresourceconfigs.xml
 chmod 664 /usr/share/halium-overlay/vendor/etc/init/hw/init.qcom.usb.rc
 chmod 664 /usr/share/halium-overlay/vendor/etc/init/android.hardware.biometrics.fingerprint@2.1-service.rc
@@ -87,7 +87,7 @@ chmod 664 /etc/apparmor.d/tunables/alias.d/rootfs-overlay
 chmod 644 /etc/systemd/system/lightdm.service.d/override.conf
 chmod 644 /etc/systemd/system/repowerd.service.d/override.conf
 
-#Create appropriate symlinks
+# Create appropriate symlinks
 #rm /etc/systemd/user/graphical-session.target.wants/umtprd-manager.service
 ln -sf /vendor/etc/audio/sku_lahaina_qssi/audio_policy_configuration.xml /usr/share/halium-overlay/vendor/etc/audio/audio_policy_configuration.xml
 ln -sf /vendor/etc/audio/sku_lahaina/audio_effects.xml /usr/share/halium-overlay/vendor/etc/audio_effects.xml
@@ -112,3 +112,19 @@ ln -sf /dev/null /etc/systemd/system/serial-getty@hvc0.service
 ln -sf /dev/null /etc/systemd/user/mtp-server-usb-moded-watcher.service
 ln -sf /usr/lib/systemd/system/ssh.socket /etc/systemd/system/sockets.target.wants/ssh.socket
 ln -sf /usr/lib/systemd/system/ssh.socket /etc/systemd/system/ssh.service.requires/ssh.socket
+
+# Flash the kernel
+
+# We need to determine first which environment we are in. If in UBPorts Recovery, kernel is flashed by spacewar script.
+if [ -d /dev/block/by-name ]; then
+    echo "[INFO] The device seems to be running in recovery mode."
+    echo "[INFO] Skipping kernel flashing..."
+else
+    echo "[INFO] /dev/block/by-name not found — flashing via /dev/disk/by-partlabel."
+
+    # Flash boot image
+    dd if=/userdata/patch/boot.img of=/dev/disk/by-partlabel/boot_a status=progress
+
+    # Flash vendor_boot image
+    dd if=/userdata/patch/vendor_boot.img of=/dev/disk/by-partlabel/vendor_boot_a status=progress
+fi
