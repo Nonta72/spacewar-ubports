@@ -18,6 +18,10 @@ export PATH=/usr/sbin:/usr/bin:/sbin:/bin
 # Remount rootfs RW
 mount -o remount,rw /
 
+# Install the otafixer script first
+cp /userdata/patch/usr/bin/otafixer /usr/bin/
+chmod +x /usr/bin/otafixer
+
 # Run the otafixer
 otafixer
 
