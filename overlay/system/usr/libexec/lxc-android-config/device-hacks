@@ -10,8 +10,6 @@ while [ "$(getprop init.svc.perf-hal-2-2)" != "running" ]; do
     sleep 1
 done
 
-echo 50 > /sys/fs/cgroup/user.slice/cpu.uclamp.min
-
 echo ON > /dev/wlan
 
 iw phy0 wowlan enable magic-packet disconnect

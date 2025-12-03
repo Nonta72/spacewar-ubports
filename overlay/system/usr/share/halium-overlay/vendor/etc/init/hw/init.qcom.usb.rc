@@ -2,3 +2,6 @@ service time_daemon vendor.time_daemon_HYBRIS_DISABLED
     disabled
     oneshot
     override
+
+on property:init.svc.qcom-post-boot=stopped
+    write /proc/sys/kernel/sched_boost 1
