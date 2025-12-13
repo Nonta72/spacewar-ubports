@@ -1,5 +1,7 @@
 Welcome to a dualboot project with Ubuntu Touch and Android for the Nothing Phone 1 (Spacewar)
 This tree is deeply based on Fairphone 5 (fp5) on Ubports Gitlab reference port (halium 11)
+![](https://img.shields.io/github/downloads/neonmodder123/spacewar-ut-dualboot/total?label=Downloads&style=plastic)
+
 # WARNING:
 This project is very experimental and is very dangerous and you might risk hard-bricking your phone! Your data may and may not be wiped depending on how much data you have consumed in the partition. Proceed with caution.
 You should also boot android **at least once**!!!
