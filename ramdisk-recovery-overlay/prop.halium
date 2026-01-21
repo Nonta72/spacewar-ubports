@@ -1,0 +1,3 @@
+ro.sf.lcd_density=320
+ro.boot.dynamic_partitions=true
+ro.systemimage.system_partition_size=4500
