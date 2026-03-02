@@ -1,4 +1,4 @@
-name: Build device tarball (kernel)
+name: Build kernel
 
 on:
   workflow_dispatch:
@@ -20,12 +20,12 @@ jobs:
           sudo ln -sf python2 /usr/bin/python
           sudo wget https://raw.githubusercontent.com/LineageOS/android_system_core/lineage-17.1/mkbootimg/mkbootimg.py -O /usr/bin/mkbootimg
 
-      - name: Build device tarball
+      - name: Compile kernel and device tarball
         run: |
           git clone https://gitlab.com/ubports/community-ports/halium-generic-adaptation-build-tools -b $ADAPTATION_TOOLS_BRANCH build
           ./build.sh
 
-      - name: Upload device tarball to artifacts
+      - name: Upload files to artifacts
         uses: actions/upload-artifact@v4
         with:
           name: device-tarball
