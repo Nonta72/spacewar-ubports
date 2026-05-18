@@ -31,3 +31,6 @@ deviceinfo_bootimg_os_patch_level="2023-04"
 deviceinfo_halium_version="12"
 
 deviceinfo_ubuntu_touch_release="24.04-1.x"
+
+deviceinfo_use_unified_recovery="true"
+deviceinfo_unified_recovery_ui_density="xhdpi"
