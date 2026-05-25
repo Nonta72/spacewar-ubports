@@ -1,0 +1,103 @@
+[Unit]
+Description=usb-moded USB gadget controller
+DefaultDependencies=no
+Wants=systemd-udev-settle.service
+Requires=dbus.socket
+After=local-fs.target dbus.socket systemd-udev-settle.service
+Conflicts=shutdown.target
+
+[Service]
+Type=notify
+TimeoutSec=25
+# Start in rescue mode, unless overridden by one of the env files below.
+Environment=USB_MODED_ARGS=-r
+EnvironmentFile=-/etc/default/usb-moded.d/*.conf
+EnvironmentFile=-/run/usb-moded/*.conf
+ExecStartPre=/bin/sleep 15
+ExecStart=/usr/sbin/usb_moded --systemd --force-syslog $USB_MODED_ARGS $USB_MODED_HW_ADAPTATION_ARGS
+Restart=always
+ExecReload=/bin/kill -HUP $MAINPID
+
+## Sandboxing
+
+# What we want to have is:
+#
+# /                  - readonly
+# /tmp               - private writable
+# /config            - shared writable (configfs gadget setup)
+# /sys               - shared writable (android-usb gadget setup, wakelocks)
+# /dev               - shared writable (mounting/unmounting mtp fs)
+# /run/usb-moded     - shared writable (udhcpd config file)
+# /var/lib/usb-moded - writable (usb-moded runtime settings data)
+#
+# Seems that attempting to use high level settings
+# like ProtectSystem, PrivateTmp, ... leads to problems
+# like mtp mount done from usb-moded not being visible
+# to mtp daemon
+
+ProtectSystem=no
+PrivateDevices=no
+PrivateTmp=no
+
+# Could use low level settings, but they are not
+# supported by our version of systemd ...
+
+#ReadOnlyPaths=/
+#ReadWritePaths=/tmp
+#ReadWritePaths=/sys
+#ReadWritePaths=/dev
+#ReadWritePaths=/config
+#ReadWritePaths=/run/usb-moded
+#ReadWritePaths=/var/lib/usb-moded
+
+# Usb-moded needs to start/stop user sessions services
+# when activating/deactivating mtp mode -> must retain
+# access to user data and home directories
+
+ProtectHome=no
+
+# a) The list of supplementary groups usb-moded needs to
+#    function properly varies from one device to another.
+# b) If any of the listed supplementary groups do not
+#    exist on the system, systemd refuses to execute
+#
+# Combining (a) and (b) makes SupplementaryGroups useless,
+# and we need to rely on CAP_DAC_OVERRIDE
+
+#SupplementaryGroups=system wakelock ...
+
+################################################################################################################################################################################################################################################################
+
+## Security
+
+# NoNewPrivileges does not work in Jolla Phone
+#NoNewPrivileges=yes
+
+# Note: Due to old systemd version: CapabilityBoundingSet merging
+#       does not work - all caps must be listed on a single line.
+
+# CAP_BLOCK_SUSPEND
+# -> wakelocking
+
+# CAP_NET_ADMIN
+# CAP_NET_RAW
+# -> network setup via ifconfig subprocess etc
+
+# CAP_SETUID
+# CAP_SETGID
+# -> running systemctl-user -> uid/gid change
+
+# CAP_SYS_RESOURCE
+# -> running systemctl-user -> scheduling config
+
+# CAP_DAC_OVERRIDE
+# -> working around problems with SupplementaryGroups=
+
+# CAP_SYS_ADMIN
+# -> mount/unmount mtp device
+
+CapabilityBoundingSet=CAP_BLOCK_SUSPEND CAP_NET_ADMIN CAP_NET_RAW CAP_SETUID CAP_SETGID CAP_SYS_RESOURCE CAP_DAC_OVERRIDE CAP_SYS_ADMIN
+
+[Install]
+WantedBy=basic.target
+
