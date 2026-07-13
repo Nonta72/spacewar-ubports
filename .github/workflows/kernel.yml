@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  devel-flashable:
+  device-tarball:
     runs-on: ubuntu-22.04
     env:
       ADAPTATION_TOOLS_BRANCH: main
