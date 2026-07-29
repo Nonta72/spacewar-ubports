@@ -1,13 +1,13 @@
-deviceinfo_name="Phone (2)"
+deviceinfo_name="Phone (1)"
 deviceinfo_manufacturer="Nothing"
-deviceinfo_codename="pong"
+deviceinfo_codename="Spacewar"
 deviceinfo_arch="aarch64"
 
 deviceinfo_kernel_source="https://gitlab.com/ubports/porting/community-ports/android12/generic/kernel-android-common.git"
-deviceinfo_kernel_source_branch="common-android12-5.10-halium"
+deviceinfo_kernel_source_branch="android12-5.4-halium"
 deviceinfo_kernel_defconfig="gki_defconfig halium.config"
 
-deviceinfo_kernel_cmdline="video=vfb:640x400,bpp=32,memsize=3072000 log_buf_len=1M ignore_loglevel printk.devkmsg=on bootconfig buildvariant=user"
+deviceinfo_kernel_cmdline="androidboot.hardware=qcom androidboot.memcg=1 lpm_levels.sleep_disabled=1 service_locator.enable=1 androidboot.usbcontroller=a600000.dwc3 swiotlb=0 loop.max_part=7 cgroup.memory=nokmem,nosocket pcie_ports=compat iptable_raw.raw_before_defrag=1 ip6table_raw.raw_before_defrag=1 console=tty0"
 
 deviceinfo_kernel_clang_compile="true"
 deviceinfo_kernel_llvm_compile="true"
@@ -15,7 +15,7 @@ deviceinfo_prebuilt_boot_ramdisk_source="https://github.com/halium/initramfs-too
 deviceinfo_ramdisk_compression="lz4"
 deviceinfo_flash_pagesize="4096"
 deviceinfo_bootimg_qcdt="false"
-deviceinfo_bootimg_header_version="4"
+deviceinfo_bootimg_header_version="3"
 deviceinfo_flash_offset_base="0x00000000"
 deviceinfo_flash_offset_kernel="0x00008000"
 deviceinfo_flash_offset_ramdisk="0x01000000"
@@ -23,14 +23,12 @@ deviceinfo_flash_offset_tags="0x00000100"
 deviceinfo_flash_offset_dtb="0x0000000001f00000"
 
 deviceinfo_bootimg_partition_size="100663296"
-#deviceinfo_bootimg_partition_size="33554432"
-deviceinfo_recovery_partition_size="104857600"
 deviceinfo_system_partition_size="3900M"
 deviceinfo_bootimg_os_version="12.0.0"
 deviceinfo_bootimg_os_patch_level="2023-04"
 deviceinfo_halium_version="12"
-
+deviceinfo_rootfs_image_sector_size="4096"
 deviceinfo_ubuntu_touch_release="24.04-1.x"
-
+deviceinfo_bootimg_prebuilt_dtb="nothing-spacewar.dtb"
 deviceinfo_use_unified_recovery="true"
 deviceinfo_unified_recovery_ui_density="xhdpi"
